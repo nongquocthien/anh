@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <meta name="color-scheme" content="dark"/>
 <link rel="icon" href="data:,"/>
-<title>Web Video Kiểu TikTok</title>
+<title>MuXu — v3.0</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <!--
   KẾT NỐI GOOGLE ADSENSE (chỉ Admin): Chỉ tài khoản username "nongquocthien"
@@ -202,6 +202,17 @@
   .st-badge.on{background:rgba(34,192,122,.14);border:1px solid rgba(34,192,122,.5);color:#7fe6bb}
   .st-badge.off{background:rgba(254,44,85,.13);border:1px solid rgba(254,44,85,.5);color:#ff9db1}
   .st-badge.adm{background:rgba(245,197,24,.14);border:1px solid rgba(245,197,24,.5);color:var(--gold)}
+  .v-tick{display:inline-grid;place-items:center;width:18px;height:18px;flex:none;border-radius:50%;background:#1d9bf0;color:#fff;vertical-align:-3px;margin-left:5px}
+  .v-tick svg{width:11px;height:11px}
+  .v-tick.big{width:22px;height:22px;vertical-align:-5px}
+  .v-tick.big svg{width:14px;height:14px}
+  .ver-pill{display:inline-block;font-size:11px;font-weight:800;padding:3px 9px;border-radius:99px;background:rgba(37,244,238,.1);border:1px solid rgba(37,244,238,.45);color:#a5f3fc;vertical-align:middle;margin-left:6px}
+  .st-badge.ver{background:rgba(29,155,240,.14);border:1px solid rgba(29,155,240,.55);color:#7cc7ff}
+  .st-badge.warn1{background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.5);color:var(--gold)}
+  .warn-item{background:var(--panel);border:1px solid rgba(245,197,24,.35);border-radius:10px;padding:11px 13px;font-size:12.5px;margin-bottom:8px;line-height:1.55}
+  .warn-item b{font-size:13px;color:#fff}
+  .warn-item span{color:var(--muted);display:block;margin-top:2px;word-break:break-word}
+  .mname{display:inline-flex;align-items:center;gap:2px;max-width:100%}
   .acct-view{position:absolute;inset:0;z-index:60;background:#0e0e0f;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none;touch-action:none}
   .acct-view[hidden]{display:none}
   .acct-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
@@ -213,6 +224,27 @@
   .mini-btn.ok{background:rgba(34,192,122,.15);border:1px solid rgba(34,192,122,.5);color:#7fe6bb}
   .mini-btn.no{background:rgba(254,44,85,.12);border:1px solid rgba(254,44,85,.5);color:#ff9db1}
 
+  /* ===== ADMIN TOÀN DIỆN — menu con gọn, bấm mới mở, bấm ra ngoài / thoát là tự thu lại ===== */
+  .adm-sub{border:1px solid var(--line);border-radius:12px;background:var(--panel);margin-bottom:8px;overflow:hidden}
+  .adm-sub-head{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:12px 12px;cursor:pointer;user-select:none}
+  .adm-sub-head:active{transform:scale(.995)}
+  .adm-sub-ic{flex:none;width:30px;height:30px;border-radius:9px;background:rgba(245,197,24,.13);border:1px solid rgba(245,197,24,.45);display:grid;place-items:center;font-size:14px;font-weight:900;color:var(--gold)}
+  .adm-sub-t{flex:1;min-width:0;font-size:14px;font-weight:800;line-height:1.3}
+  .adm-sub-t small{display:block;font-size:11.5px;font-weight:600;color:var(--muted2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .adm-badge{flex:none;font-size:11px;font-weight:800;padding:4px 8px;border-radius:99px;background:rgba(37,244,238,.1);border:1px solid rgba(37,244,238,.4);color:#a5f3fc;white-space:nowrap}
+  .adm-badge.hot{background:rgba(254,44,85,.13);border-color:rgba(254,44,85,.55);color:#ff9db1}
+  .adm-chev{flex:none;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .18s}
+  .adm-sub.open .adm-chev{transform:rotate(-135deg)}
+  .adm-sub-body{padding:2px 12px 14px;border-top:1px solid var(--line)}
+  .adm-sub-body[hidden]{display:none}
+  .adm-toggle-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .adm-toggle-row:last-child{border-bottom:0}
+  .adm-toggle-row .tt{flex:1;line-height:1.45}.adm-toggle-row .tt small{display:block;color:var(--muted2);font-size:12px;margin-top:2px}
+  .toggle-btn{flex:none;min-width:64px;padding:8px 12px;border-radius:99px;font-size:12.5px;font-weight:800;border:1px solid var(--line);background:var(--panel2);color:var(--muted)}
+  .toggle-btn.on{background:rgba(34,192,122,.16);border-color:rgba(34,192,122,.55);color:#7fe6bb}
+  .toggle-btn.off{background:rgba(254,44,85,.12);border-color:rgba(254,44,85,.5);color:#ff9db1}
+  .lock-mini{flex:none;padding:7px 10px;border-radius:8px;font-size:11.5px;font-weight:800;border:1px solid rgba(245,197,24,.5);background:rgba(245,197,24,.1);color:var(--gold)}
+  .lock-mini.unlock{border-color:rgba(34,192,122,.55);background:rgba(34,192,122,.13);color:#7fe6bb}
   .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);background:#fff;color:#000;font-size:13.5px;font-weight:600;padding:11px 17px;border-radius:99px;z-index:100;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 8px 28px rgba(0,0,0,.45);max-width:88vw;text-align:center}
   .toast.show{opacity:1;transform:translate(-50%,0)}
   .noti-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 13px;margin-bottom:8px}
@@ -264,6 +296,7 @@
   .hud.pulse{animation:hudPulse .55s ease}
   @keyframes hudPulse{0%{transform:scale(1)}35%{transform:scale(1.08);border-color:var(--gold)}100%{transform:scale(1)}}
   .level-badge{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:99px;background:rgba(245,197,24,.13);border:1px solid rgba(245,197,24,.5);color:var(--gold)}
+  .section[hidden],.level-badge[hidden]{display:none!important}
   .daily-chart{display:flex;align-items:flex-end;gap:8px;padding:14px 12px 8px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
   .dc-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
   .dc-bar{width:100%;max-width:30px;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,var(--gold),#d97706);min-height:4px}
@@ -357,7 +390,9 @@
           <ellipse cx="70" cy="111" rx="6.5" ry="5.5" fill="#f6a609" stroke="#d97706" stroke-width="1.6" transform="rotate(24 70 111)"/>
         </svg>
       </div>
-      <p class="web-note"><i aria-hidden="true"></i>Xem quảng cáo · Nhận xu · Rút MoMo / ZaloPay</p>
+      <h1 style="margin:0 0 4px">MuXu<span class="ver-pill">v3.0</span></h1>
+      <p class="sub" style="margin:0 0 14px">Xem quảng cáo · Nhận xu · Rút về MoMo / ZaloPay</p>
+      <p class="web-note"><i aria-hidden="true"></i>MuXu v3.0 — bản mới nhất</p>
       <div class="auth-tabs" role="tablist">
         <button type="button" id="tabLogin" class="on">Đăng nhập</button>
         <button type="button" id="tabRegister">Đăng ký</button>
@@ -461,13 +496,15 @@
         <div class="avatar" id="ucAvatar">?</div>
         <div class="name" id="ucName">@…</div>
         <div class="id" id="ucId">ID: —</div>
+        <div id="ucVerified" hidden style="margin-top:7px"><span class="st-badge ver">✓ Đã xác thực · Tích xanh</span></div>
+        <div id="ucWarn" hidden style="margin-top:7px"><span class="st-badge warn1" id="ucWarnText">Cảnh báo vi phạm: 0</span></div>
         <span class="role-badge" id="ucRole">Người xem</span>
         <span class="level-badge" id="ucLevel">Cấp 1 · Mới bắt đầu</span>
         <button class="btn ghost logout-btn" id="logoutBtn" type="button">Đăng xuất</button>
       </div>
 
       <!-- MỤC 1: THỐNG KÊ ĐÃ XEM -->
-      <div class="section" aria-labelledby="h-stats">
+      <div class="section" id="secStats" aria-labelledby="h-stats">
         <div class="section-head"><span class="section-num">1</span><h3 id="h-stats">Thống kê đã xem</h3></div>
         <div class="section-body" hidden>
         <div class="stat-grid">
@@ -480,7 +517,7 @@
           <div class="stat"><b id="stToday">0</b><span>Lượt xem hôm nay</span></div>
           <div class="stat"><b id="stTime">0 giây</b><span>Tổng thời gian đã xem</span></div>
           <div class="stat wide">
-            <div class="progress-row" style="margin-top:0"><span>Tiến độ tới mức rút tối thiểu 2.000 xu</span><b id="stProgressText" style="color:#fff">0%</b></div>
+            <div class="progress-row" style="margin-top:0"><span>Tiến độ tới mức rút tối thiểu <span class="js-min-wd">2.000</span> xu</span><b id="stProgressText" style="color:#fff">0%</b></div>
             <div class="track"><i id="stProgressBar"></i></div>
           </div>
           <div class="stat wide">
@@ -501,7 +538,7 @@
       </div>
 
       <!-- MỤC 2: SỐ DƯ -->
-      <div class="section" aria-labelledby="h-balance">
+      <div class="section" id="secBalance" aria-labelledby="h-balance">
         <div class="section-head"><span class="section-num">2</span><h3 id="h-balance">Số dư</h3></div>
         <div class="section-body" hidden>
         <div class="balance-card">
@@ -510,15 +547,15 @@
           <div class="balance-rows">
             <div><span>Tổng xu đã tích lũy</span><b id="balEarned">0 xu</b></div>
             <div><span>Đã yêu cầu rút</span><b id="balRequested">0 xu</b></div>
-            <div><span>Mức rút tối thiểu</span><b>2.000 xu</b></div>
+            <div><span>Mức rút tối thiểu</span><b><span class="js-min-wd">2.000</span> xu</b></div>
           </div>
         </div>
         </div>
       </div>
 
       <!-- MỤC 3: RÚT XU -->
-      <div class="section" aria-labelledby="h-withdraw">
-        <div class="section-head"><span class="section-num">3</span><h3 id="h-withdraw">Rút xu</h3><span>Tối thiểu 2.000 xu</span></div>
+      <div class="section" id="secWithdraw" aria-labelledby="h-withdraw">
+        <div class="section-head"><span class="section-num">3</span><h3 id="h-withdraw">Rút xu</h3><span>Tối thiểu <span class="js-min-wd">2.000</span> xu</span></div>
         <div class="section-body" hidden>
         <div class="form-msg" id="withdrawMsg" role="status"></div>
         <form id="withdrawForm" novalidate>
@@ -554,7 +591,7 @@
       </div>
 
       <!-- MỤC 4: THIẾT BỊ & BẢO MẬT -->
-      <div class="section" aria-labelledby="h-device">
+      <div class="section" id="secDevice" aria-labelledby="h-device">
         <div class="section-head"><span class="section-num">4</span><h3 id="h-device">Thiết bị &amp; bảo mật</h3></div>
         <div class="section-body" hidden>
         <div class="device-rows" id="deviceRows"></div>
@@ -565,9 +602,43 @@
         </div>
       </div>
 
+      <!-- MỤC 5: ĐỔI / QUÊN MẬT KHẨU — tích hợp vào quản lý tài khoản của người dùng,
+           menu gọn trong Trang cá nhân: bấm vào đầu mục mới hiện ra nội dung -->
+      <div class="section" id="secPassword" aria-labelledby="h-password">
+        <div class="section-head"><span class="section-num">5</span><h3 id="h-password">Đổi / quên mật khẩu</h3></div>
+        <div class="section-body" hidden>
+        <div class="form-msg" id="changePassMsg" role="status"></div>
+        <form id="changePassForm" novalidate>
+          <div class="field">
+            <label for="cpCur">Mật khẩu hiện tại</label>
+            <input id="cpCur" type="password" placeholder="Nhập mật khẩu đang dùng" autocomplete="current-password"/>
+          </div>
+          <div class="field">
+            <label for="cpNew">Mật khẩu mới</label>
+            <input id="cpNew" type="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"/>
+          </div>
+          <div class="field">
+            <label for="cpNew2">Nhập lại mật khẩu mới</label>
+            <input id="cpNew2" type="password" placeholder="Nhập lại mật khẩu mới" autocomplete="new-password"/>
+          </div>
+          <button class="btn primary block" type="submit">Đổi mật khẩu</button>
+        </form>
+        <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:14px">
+          <h4 style="margin:0 0 6px;font-size:14px">Quên mật khẩu?</h4>
+          <p class="rate-note" style="margin:0 0 12px">Gửi yêu cầu tới Admin ngay tại đây. Admin duyệt xong, lần đăng nhập tiếp theo bạn sẽ được đặt mật khẩu mới.</p>
+          <div class="form-msg" id="myForgotMsg" role="status"></div>
+          <button class="btn ghost block" type="button" id="myForgotBtn">Gửi yêu cầu quên mật khẩu tới Admin</button>
+          <div class="history">
+            <h4>Trạng thái yêu cầu của bạn</h4>
+            <div id="myForgotList"><div class="empty-note">Chưa có yêu cầu quên mật khẩu nào.</div></div>
+          </div>
+        </div>
+        </div>
+      </div>
+
       <!-- MỤC 5: CHỈ ADMIN (username nongquocthien) — người xem thường không thấy mục này -->
       <div class="section" id="adminSection" hidden aria-labelledby="h-adsense">
-        <div class="section-head"><span class="section-num">5</span><h3 id="h-adsense">Khu vực Admin</h3></div>
+        <div class="section-head"><h3 id="h-adsense">Khu vực Admin · MuXu v3.0</h3></div>
         <div class="section-body" hidden>
         <div class="admin-ov">
           <div class="stat"><b id="admOvUsers">0</b><span>Tổng tài khoản</span></div>
@@ -575,15 +646,12 @@
           <div class="stat"><b id="admOvWd">0</b><span>Lệnh rút xu chờ duyệt</span></div>
           <div class="stat"><b id="admOvFg">0</b><span>Yêu cầu quên mật khẩu chờ duyệt</span></div>
         </div>
-        <div class="form-msg" id="adsenseMsg" role="status"></div>
-        <form id="adsenseForm" novalidate>
-          <div class="field">
-            <label for="pubId">Kết nối AdSense — Publisher ID của Admin</label>
-            <input id="pubId" type="text" placeholder="ca-pub-1234567890123456" autocomplete="off" spellcheck="false"/>
-          </div>
-          <button class="btn ghost block" type="submit">Kích hoạt AdSense</button>
-        </form>
-        <div class="balance-card" style="margin-top:12px">
+        <p class="rate-note" style="margin:0 0 12px">Mỗi mục dưới đây là một menu gọn — bấm vào mới mở ra, bấm sang chỗ khác hoặc thoát ra là tự thu lại. Chỉ Admin điều khiển được toàn hệ thống.</p>
+
+        <div class="adm-sub" data-adm="rev">
+          <button type="button" class="adm-sub-head" aria-expanded="false"><span class="adm-sub-ic">%</span><span class="adm-sub-t">Doanh thu &amp; % chia toàn hệ thống<small>Chỉnh % người xem nhận được trên toàn hệ thống</small></span><span class="adm-badge" id="admBadgeRev">Người xem 11%</span><span class="adm-chev"></span></button>
+          <div class="adm-sub-body" hidden>
+        <div class="balance-card">
           <div class="label">Thưởng xu</div>
           <div class="balance-rows">
             <div><span>Tổng lượt đã ghi nhận</span><b id="admTotalViews">0</b></div>
@@ -600,6 +668,11 @@
           <div class="field" style="margin-top:12px">
             <label for="rsPerView">Google trả cho 1 lượt xem hết (USD)</label>
             <input id="rsPerView" type="number" min="0" step="0.01" inputmode="decimal"/>
+          </div>
+          <div class="field">
+            <label for="rsUserPct">Người xem toàn hệ thống nhận (%) — chỉnh trực tiếp tại đây</label>
+            <input id="rsUserPct" type="number" min="0" max="100" step="1" inputmode="numeric"/>
+            <div class="hint">Đổi số % này là áp dụng ngay cho toàn hệ thống và tự tính lại quỹ chia cho từng người xem ở dưới. Admin giữ lại = 100% − % người xem. Người xem không nhìn thấy tỉ lệ này.</div>
           </div>
           <div class="field">
             <label for="rsAdminPct">Admin giữ lại (%)</label>
@@ -619,24 +692,57 @@
             <div id="rsTable"><div class="empty-note">Chưa có người xem nào.</div></div>
           </div>
         </div>
-        <div class="history">
-          <h4>Quản lý tài khoản</h4>
+          </div>
+        </div>
+
+        <div class="adm-sub" data-adm="adsense">
+          <button type="button" class="adm-sub-head" aria-expanded="false"><span class="adm-sub-ic">G</span><span class="adm-sub-t">Kết nối AdSense<small>Publisher ID của Admin</small></span><span class="adm-chev"></span></button>
+          <div class="adm-sub-body" hidden>
+        <div class="form-msg" id="adsenseMsg" role="status"></div>
+        <form id="adsenseForm" novalidate>
+          <div class="field">
+            <label for="pubId">Publisher ID</label>
+            <input id="pubId" type="text" placeholder="ca-pub-1234567890123456" autocomplete="off" spellcheck="false"/>
+          </div>
+          <button class="btn ghost block" type="submit">Kích hoạt AdSense</button>
+        </form>
+          </div>
+        </div>
+
+        <div class="adm-sub" data-adm="accounts">
+          <button type="button" class="adm-sub-head" aria-expanded="false"><span class="adm-sub-ic">👤</span><span class="adm-sub-t">Quản lý tài khoản<small>Bấm vào tên người dùng để mở menu: cấp lại mật khẩu, khóa tài khoản, tích xanh, cộng / trừ xu, cảnh báo…</small></span><span class="adm-badge" id="admBadgeUsers">0 tài khoản</span><span class="adm-chev"></span></button>
+          <div class="adm-sub-body" hidden>
           <div class="field">
             <input id="admSearch" type="text" placeholder="Tìm tài khoản theo username hoặc ID…" autocomplete="off" spellcheck="false"/>
           </div>
           <div id="adminAcctList"><div class="empty-note">Chưa có tài khoản nào.</div></div>
+          </div>
         </div>
-        <div class="history">
-          <h4>Thông báo quên mật khẩu</h4>
-          <div id="adminForgotList"><div class="empty-note">Chưa có yêu cầu quên mật khẩu nào.</div></div>
-        </div>
-        <div class="history">
-          <h4>Yêu cầu rút xu</h4>
+
+        <div class="adm-sub" data-adm="withdraw">
+          <button type="button" class="adm-sub-head" aria-expanded="false"><span class="adm-sub-ic">₫</span><span class="adm-sub-t">Xét duyệt rút tiền<small>Duyệt / từ chối / đã thanh toán, xem QR sau khi duyệt</small></span><span class="adm-badge" id="admBadgeWd">0 chờ duyệt</span><span class="adm-chev"></span></button>
+          <div class="adm-sub-body" hidden>
           <div id="adminWdList"><div class="empty-note">Chưa có yêu cầu rút xu nào.</div></div>
+          </div>
         </div>
-        <div class="history">
-          <h4>Nhật ký thiết bị</h4>
+
+        <div class="adm-sub" data-adm="system">
+          <button type="button" class="adm-sub-head" aria-expanded="false"><span class="adm-sub-ic">⚙</span><span class="adm-sub-t">Điều khiển hệ thống<small>Mức rút, thưởng điểm danh, thời lượng quảng cáo, mở / đóng hệ thống</small></span><span class="adm-chev"></span></button>
+          <div class="adm-sub-body" hidden>
+          <div class="field"><label for="sysMinWithdraw">Mức rút tối thiểu toàn hệ thống (xu)</label><input id="sysMinWithdraw" type="number" min="1" step="1" inputmode="numeric"/></div>
+          <div class="field"><label for="sysCheckin">Xu điểm danh mỗi ngày</label><input id="sysCheckin" type="number" min="0" step="0.1" inputmode="decimal"/></div>
+          <div class="field"><label for="sysViewSec">Thời lượng tính 1 quảng cáo (giây)</label><input id="sysViewSec" type="number" min="1" max="120" step="1" inputmode="numeric"/></div>
+          <div class="adm-toggle-row"><span class="tt">Cho phép đăng ký tài khoản mới<small>Tắt là không ai đăng ký thêm được</small></span><button type="button" class="toggle-btn on" id="sysAllowReg">Đang bật</button></div>
+          <div class="adm-toggle-row"><span class="tt">Chế độ bảo trì<small>Bật là người xem thường tạm không đăng nhập được, Admin vẫn vào được</small></span><button type="button" class="toggle-btn off" id="sysMaint">Đang tắt</button></div>
+          <p class="rate-note">Mọi thay đổi ở mục này lưu và áp dụng ngay cho toàn hệ thống.</p>
+          </div>
+        </div>
+
+        <div class="adm-sub" data-adm="logs">
+          <button type="button" class="adm-sub-head" aria-expanded="false"><span class="adm-sub-ic">☰</span><span class="adm-sub-t">Nhật ký hệ thống<small>Thiết bị, mạng, IP — chỉ Admin thấy</small></span><span class="adm-chev"></span></button>
+          <div class="adm-sub-body" hidden>
           <div id="adminLogList"><div class="empty-note">Chưa có nhật ký nào.</div></div>
+          </div>
         </div>
         </div>
       </div>
@@ -724,6 +830,20 @@
   var CHECKIN_REWARD = 0.5;            // điểm danh hàng ngày: +0,5 xu
   /* Cài đặt chia doanh thu (chỉ Admin sửa được) — tự động tính lại khi thay đổi */
   var revSettings = { perViewUSD: 1, adminPct: 89, usdVnd: 25000 };
+  /* Điều khiển toàn hệ thống (chỉ Admin sửa được, lưu bền và áp dụng ngay) */
+  var sysCtrl = { minWithdraw: 2000, checkinReward: 0.5, viewSeconds: 5, allowRegister: true, maintenance: false };
+  function applySysCtrl(){
+    MIN_WITHDRAW = Math.max(1, Math.round(sysCtrl.minWithdraw || 2000));
+    CHECKIN_REWARD = Math.max(0, parseFloat(sysCtrl.checkinReward) || 0);
+    VIEW_SECONDS = Math.min(120, Math.max(1, Math.round(sysCtrl.viewSeconds || 5)));
+    document.querySelectorAll(".js-min-wd").forEach(function(el){ el.textContent = fmt(MIN_WITHDRAW); });
+    var wa = document.getElementById("wdAmount"); if(wa){ wa.min = MIN_WITHDRAW; wa.placeholder = "Tối thiểu " + fmt(MIN_WITHDRAW) + " xu"; }
+    var s1=document.getElementById("sysMinWithdraw"); if(s1 && document.activeElement!==s1) s1.value = sysCtrl.minWithdraw;
+    var s2=document.getElementById("sysCheckin"); if(s2 && document.activeElement!==s2) s2.value = sysCtrl.checkinReward;
+    var s3=document.getElementById("sysViewSec"); if(s3 && document.activeElement!==s3) s3.value = sysCtrl.viewSeconds;
+    var t1=document.getElementById("sysAllowReg"); if(t1){ t1.textContent = sysCtrl.allowRegister ? "Đang bật" : "Đang tắt"; t1.className = "toggle-btn " + (sysCtrl.allowRegister ? "on" : "off"); }
+    var t2=document.getElementById("sysMaint"); if(t2){ t2.textContent = sysCtrl.maintenance ? "Đang bật" : "Đang tắt"; t2.className = "toggle-btn " + (sysCtrl.maintenance ? "off" : "on"); t2.textContent = sysCtrl.maintenance ? "Đang bật" : "Đang tắt"; }
+  }
   function fmtUSD2(n){ return "$" + (Math.round(n * 100) / 100).toLocaleString("vi-VN", { minimumFractionDigits:2, maximumFractionDigits:2 }); }
   var VIEW_SECONDS = 5;
   var BATCH_ADS = 6;       // mỗi lần cuộn gần cuối nạp thêm 6 quảng cáo — cuộn vô hạn, không giới hạn số quảng cáo
@@ -846,6 +966,9 @@
     var pfg = 0;
     try{ (forgotRequests || []).forEach(function(r){ if(r.status === "pending") pfg++; }); }catch(e){}
     var f = document.getElementById("admOvFg"); if(f) f.textContent = fmt(pfg);
+    var bu = document.getElementById("admBadgeUsers"); if(bu) bu.textContent = fmt(keys.length) + " tài khoản";
+    var bw = document.getElementById("admBadgeWd"); if(bw){ bw.textContent = fmt(pwd) + " chờ duyệt"; bw.classList.toggle("hot", pwd > 0); }
+    try{ applySysCtrl(); }catch(e){}
   }
   function totalWatched(){ return (state.fullCount||0) + (state.partialCount||0); }
   function acctFull(a){ return (a.fullCount != null ? a.fullCount : (a.watchedCount || 0)); }
@@ -898,7 +1021,9 @@
     var iv;
     iv = document.getElementById("rsPerView"); if(iv && document.activeElement !== iv) iv.value = revSettings.perViewUSD;
     iv = document.getElementById("rsAdminPct"); if(iv && document.activeElement !== iv) iv.value = revSettings.adminPct;
+    iv = document.getElementById("rsUserPct"); if(iv && document.activeElement !== iv) iv.value = 100 - pct;
     iv = document.getElementById("rsRate"); if(iv && document.activeElement !== iv) iv.value = revSettings.usdVnd;
+    var rb = document.getElementById("admBadgeRev"); if(rb) rb.textContent = "Người xem " + (100 - pct) + "%";
     var table = document.getElementById("rsTable");
     if(!table) return;
     var keys = Object.keys(accounts);
@@ -909,28 +1034,41 @@
       var full = acctFull(a), part = acctPartial(a);
       var sharePct = tf > 0 ? full / tf * 100 : 0;
       var usd = pool * (tf > 0 ? full / tf : 0);
-      return '<div class="history-item"><div><b>@' + esc(a.username) + ' · ID ' + a.id + '</b>' +
+      return '<div class="history-item"><div><b>@' + esc(a.username) + (a.verified ? ' ✓' : '') + ' · ID ' + a.id + '</b>' +
         '<span>Xem hết: ' + fmt(full) + ' lượt · Xem nửa chừng: ' + fmt(part) + ' lượt<br/>Tỉ trọng: ' + (Math.round(sharePct * 100) / 100).toLocaleString("vi-VN") + '% của quỹ</span></div>' +
         '<div style="text-align:right;flex:none"><b>' + fmtUSD2(usd) + '</b><span style="display:block;color:var(--muted);font-size:12px;margin-top:2px">' + fmt(Math.round(usd * rate)) + 'đ</span></div></div>';
     }).join("");
   }
-  ["rsPerView", "rsAdminPct", "rsRate"].forEach(function(id){
+  ["rsPerView", "rsAdminPct", "rsUserPct", "rsRate"].forEach(function(id){
     var el = document.getElementById(id);
     if(!el) return;
     el.addEventListener("input", function(){
       var v = parseFloat(el.value);
       if(id === "rsPerView") revSettings.perViewUSD = isNaN(v) ? 0 : Math.max(0, v);
       if(id === "rsAdminPct") revSettings.adminPct = isNaN(v) ? 0 : Math.min(100, Math.max(0, v));
+      if(id === "rsUserPct") revSettings.adminPct = isNaN(v) ? 100 : Math.min(100, Math.max(0, 100 - v));
       if(id === "rsRate") revSettings.usdVnd = isNaN(v) ? 0 : Math.max(0, v);
       try{ saveStore(); }catch(e){}
       renderRevShare();
     });
   });
+  /* Điều khiển hệ thống: nhập số + 2 nút bật/tắt */
+  [["sysMinWithdraw","minWithdraw"],["sysCheckin","checkinReward"],["sysViewSec","viewSeconds"]].forEach(function(pair){
+    var el = document.getElementById(pair[0]); if(!el) return;
+    el.addEventListener("input", function(){
+      var v = parseFloat(el.value); if(isNaN(v)) return;
+      sysCtrl[pair[1]] = v; applySysCtrl(); try{ saveStore(); }catch(e){} try{ renderStats(); }catch(e){}
+    });
+  });
+  var tAllow = document.getElementById("sysAllowReg");
+  if(tAllow) tAllow.addEventListener("click", function(){ sysCtrl.allowRegister = !sysCtrl.allowRegister; applySysCtrl(); try{ saveStore(); }catch(e){} toast(sysCtrl.allowRegister ? "Đã BẬT đăng ký tài khoản mới" : "Đã TẮT đăng ký tài khoản mới"); });
+  var tMaint = document.getElementById("sysMaint");
+  if(tMaint) tMaint.addEventListener("click", function(){ sysCtrl.maintenance = !sysCtrl.maintenance; applySysCtrl(); try{ saveStore(); }catch(e){} toast(sysCtrl.maintenance ? "Đã BẬT bảo trì — người xem thường tạm không đăng nhập được" : "Đã TẮT bảo trì — hệ thống mở bình thường"); });
   /* ---------- Storage bền vững (localStorage) — không mất khi tải lại trang ---------- */
   var STORE_KEY = "wvtt_store_v2";
   function saveStore(){
     try{
-      var data = { accounts:accounts, usedIds:usedIds, deviceOwners:deviceOwners, deviceLogs:deviceLogs.slice(0,200), forgotRequests:forgotRequests, adsenseClient:adsenseClient, revSettings:revSettings, sessionKey: currentUser ? currentUser.username.toLowerCase() : null };
+      var data = { accounts:accounts, usedIds:usedIds, deviceOwners:deviceOwners, deviceLogs:deviceLogs.slice(0,200), forgotRequests:forgotRequests, adsenseClient:adsenseClient, revSettings:revSettings, sysCtrl:sysCtrl, sessionKey: currentUser ? currentUser.username.toLowerCase() : null };
       localStorage.setItem(STORE_KEY, JSON.stringify(data));
       localStorage.setItem("wvtt_verify", "saved:" + new Date().toISOString() + ":accounts=" + Object.keys(accounts).length);
     }catch(e){}
@@ -946,6 +1084,15 @@
       if(d.forgotRequests){ d.forgotRequests.forEach(function(r){ r.time=reviveDate(r.time); r.joinedAt=reviveDate(r.joinedAt); }); forgotRequests=d.forgotRequests; }
       if(d.adsenseClient) adsenseClient=d.adsenseClient;
       if(d.revSettings) revSettings=d.revSettings;
+      if(d.sysCtrl){ sysCtrl.minWithdraw=d.sysCtrl.minWithdraw||2000; sysCtrl.checkinReward=(d.sysCtrl.checkinReward!=null?d.sysCtrl.checkinReward:0.5); sysCtrl.viewSeconds=d.sysCtrl.viewSeconds||5; sysCtrl.allowRegister=d.sysCtrl.allowRegister!==false; sysCtrl.maintenance=!!d.sysCtrl.maintenance; try{ applySysCtrl(); }catch(e){} }
+      /* Gỡ hẳn các tài khoản đã bị Admin xóa (vd: vuianh) khỏi dữ liệu đã lưu,
+         hủy luôn phiên đăng nhập của chúng và lưu lại dữ liệu đã sạch. */
+      if(purgeRemovedAccounts()){
+        if(d.sessionKey && REMOVED_USERNAMES.indexOf(d.sessionKey) >= 0) d.sessionKey = null;
+        try{
+          localStorage.setItem(STORE_KEY, JSON.stringify({ accounts:accounts, usedIds:usedIds, deviceOwners:deviceOwners, deviceLogs:deviceLogs.slice(0,200), forgotRequests:forgotRequests, adsenseClient:adsenseClient, revSettings:revSettings, sessionKey:d.sessionKey }));
+        }catch(e2){}
+      }
       return d;
     }catch(e){ return null; }
   }
@@ -1221,7 +1368,7 @@
     if(view){ pauseWatching(); } else { resumeWatching(); }
   }
   function openProfile(){ if(!currentUser) return; watchPaused = true; haltTimers(); renderStats(); renderAccount(); showTab(profileView); pauseWatching(); }
-  function closeProfile(){ showTab(null); }
+  function closeProfile(){ try{ closeAllAdminSubs(); collapseProfileSections(); }catch(e){} showTab(null); }
   document.getElementById("openProfile").addEventListener("click", openProfile);
   document.getElementById("closeProfile").addEventListener("click", closeProfile);
   /* Nút Thông báo ở giao diện chính: mở màn hình Thông báo RIÊNG (tự đóng tab đang mở khác) */
@@ -1501,22 +1648,17 @@
 
   /* ---------- Quên mật khẩu: người dùng gửi yêu cầu, Admin duyệt ---------- */
   var forgotRequests = [];   // {key, username, userId, joinedAt, time, newPassHash, status}
+  /* Không còn mục Đổi / quên mật khẩu riêng trong Khu vực Admin:
+     toàn bộ đổi mật khẩu / duyệt quên mật khẩu / bắt đổi mật khẩu nằm trong
+     Chi tiết từng tài khoản (Quản lý tài khoản → bấm vào tài khoản mới hiện).
+     Hàm này chỉ đồng bộ số chờ duyệt ở Tổng quan và làm mới Chi tiết đang mở. */
   function renderAdminForgot(){
-    var box = document.getElementById("adminForgotList");
-    if(!box) return;
-    if(!isAdmin(currentUser)){ box.innerHTML = ""; return; }
-    if(!forgotRequests.length){ box.innerHTML = '<div class="empty-note">Chưa có yêu cầu quên mật khẩu nào.</div>'; return; }
-    box.innerHTML = forgotRequests.map(function(r, idx){
-      var right = r.status === "pending"
-        ? '<span class="wd-actions"><button type="button" class="mini-btn ok" data-fg-act="approve" data-fg-idx="' + idx + '">Duyệt</button>' +
-          '<button type="button" class="mini-btn no" data-fg-act="reject" data-fg-idx="' + idx + '">Từ chối</button></span>'
-        : (r.status === "approved" ? (r.done ? '<span class="st-badge on">Đã đặt mật khẩu mới</span>' : '<span class="st-badge adm">Đã duyệt · chờ đặt mật khẩu</span>') : '<span class="st-badge off">Bị từ chối</span>');
-      return '<div class="history-item"><div><b>@' + esc(r.username) + ' · ID: ' + r.userId + '</b>' +
-        '<span>Ngày tham gia: ' + esc(r.joinedAt ? r.joinedAt.toLocaleString("vi-VN") : "—") + '<br/>Ngày quên mật khẩu: ' + esc(r.time.toLocaleString("vi-VN")) + '</span></div>' + right + '</div>';
-    }).join("");
+    try{ renderAdminOverview(); }catch(e){}
+    var av = document.getElementById("acctView");
+    if(av && !av.hidden && selectedAcctKey) renderAcctDetail();
   }
-  document.getElementById("adminForgotList").addEventListener("click", function(e){
-    var btn = e.target && e.target.closest ? e.target.closest("[data-fg-act]") : null;
+  /* Duyệt / từ chối yêu cầu quên mật khẩu NGAY trong Chi tiết tài khoản */
+  function acctForgotAction(btn){
     if(!btn || !isAdmin(currentUser)) return;
     var r = forgotRequests[parseInt(btn.getAttribute("data-fg-idx"), 10)];
     if(!r || r.status !== "pending") return;
@@ -1524,15 +1666,18 @@
     if(btn.getAttribute("data-fg-act") === "approve"){
       if(acc){ acc.forceNewPass = true; delete loginFails[r.key]; }
       r.status = "approved";
-      addLog("Admin duyệt quên mật khẩu", r.username, false, "ID " + r.userId + " · người dùng sẽ đặt mật khẩu mới khi đăng nhập lại");
+      addLog("Admin duyệt quên mật khẩu", r.username, false, "ID " + r.userId + " · duyệt trong Chi tiết tài khoản · người dùng sẽ đặt mật khẩu mới khi đăng nhập lại");
       toast("Đã duyệt · @" + r.username + " sẽ đặt mật khẩu mới khi đăng nhập lại");
     } else {
       r.status = "rejected";
       addLog("Admin từ chối quên mật khẩu", r.username, true, "ID " + r.userId + " · mật khẩu cũ giữ nguyên");
       toast("Đã từ chối yêu cầu của @" + r.username);
     }
-    renderAdminForgot();
-  });
+    acctOpenSecs = { pass:true };
+    try{ saveStore(); }catch(e){}
+    try{ renderAdminOverview(); }catch(e){}
+    renderAcctDetail(); renderAdminAccounts();
+  }
 
   /* Mở / đóng form quên mật khẩu */
   var resetForm = document.getElementById("resetForm");
@@ -1613,6 +1758,65 @@
     setTab(false);
   });
 
+  /* ---------- Đổi / quên mật khẩu NGAY TRONG Trang cá nhân (mục quản lý tài khoản của người dùng) ----------
+     Mục này nằm thu gọn trong Trang cá nhân — bấm vào đầu mục mới hiện ra (accordion có sẵn lo việc mở / thu).
+     - Đổi mật khẩu: nhập mật khẩu hiện tại + mật khẩu mới -> đổi ngay, mật khẩu cũ mất hiệu lực.
+     - Quên mật khẩu: gửi yêu cầu vào đúng danh sách Admin duyệt (forgotRequests) và hiện trạng thái tại đây. */
+  function fgStatusBadge(r){
+    if(r.status === "pending") return '<span class="st-badge adm">Chờ Admin duyệt</span>';
+    if(r.status === "approved") return r.done ? '<span class="st-badge on">Đã đặt mật khẩu mới</span>' : '<span class="st-badge adm">Đã duyệt · chờ đặt mật khẩu mới</span>';
+    return '<span class="st-badge off">Bị từ chối</span>';
+  }
+  function renderMyPassword(){
+    var box = document.getElementById("myForgotList");
+    if(!box || !currentUser) return;
+    var key = currentUser.username.toLowerCase();
+    var mine = forgotRequests.filter(function(r){ return r.key === key; });
+    if(!mine.length){ box.innerHTML = '<div class="empty-note">Chưa có yêu cầu quên mật khẩu nào.</div>'; return; }
+    box.innerHTML = mine.map(function(r){
+      return '<div class="history-item"><div><b>Yêu cầu quên mật khẩu</b><span>' + esc(r.time ? new Date(r.time).toLocaleString("vi-VN") : "") + '</span></div>' + fgStatusBadge(r) + '</div>';
+    }).join("");
+  }
+  document.getElementById("changePassForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("changePassMsg");
+    if(!currentUser) return;
+    var key = currentUser.username.toLowerCase();
+    var cur = document.getElementById("cpCur").value;
+    var nw = document.getElementById("cpNew").value;
+    var nw2 = document.getElementById("cpNew2").value;
+    if(currentUser.passHash !== hashStr(cur + "|" + key)){ showMsg(msg, "Mật khẩu hiện tại chưa đúng.", false); return; }
+    if(nw.length < 6){ showMsg(msg, "Mật khẩu mới phải có ít nhất 6 ký tự.", false); return; }
+    if(nw === cur){ showMsg(msg, "Mật khẩu mới phải khác mật khẩu hiện tại.", false); return; }
+    if(nw !== nw2){ showMsg(msg, "Mật khẩu nhập lại chưa khớp.", false); return; }
+    currentUser.passHash = hashStr(nw + "|" + key);
+    delete currentUser.tempPass; currentUser.forceNewPass = false; delete loginFails[key];
+    addLog("Đổi mật khẩu", currentUser.username, false, "Đổi ngay trong Trang cá nhân · ID " + currentUser.id);
+    try{ saveStore(); }catch(err){}
+    document.getElementById("cpCur").value = ""; document.getElementById("cpNew").value = ""; document.getElementById("cpNew2").value = "";
+    showMsg(msg, "Đã đổi mật khẩu thành công. Từ lần đăng nhập sau, hãy dùng mật khẩu mới.", true);
+    toast("Đã đổi mật khẩu thành công");
+  });
+  document.getElementById("myForgotBtn").addEventListener("click", function(){
+    var msg = document.getElementById("myForgotMsg");
+    if(!currentUser) return;
+    var key = currentUser.username.toLowerCase();
+    if(currentUser.forceNewPass){ showMsg(msg, "Admin đã duyệt yêu cầu trước của bạn. Đăng xuất rồi đăng nhập lại để đặt mật khẩu mới.", false); return; }
+    var pending = forgotRequests.some(function(r){ return r.key === key && r.status === "pending"; });
+    if(pending){ showMsg(msg, "Bạn đã có yêu cầu đang chờ Admin duyệt. Vui lòng chờ Admin xử lý.", false); return; }
+    forgotRequests.unshift({
+      key: key, username: currentUser.username, userId: currentUser.id,
+      joinedAt: currentUser.createdAt || null, time: new Date(),
+      newPassHash: "", status: "pending"
+    });
+    addLog("Yêu cầu quên mật khẩu", currentUser.username, false, "Gửi từ Trang cá nhân · ID " + currentUser.id);
+    renderAdminForgot(); renderMyPassword();
+    try{ renderAdminOverview(); }catch(e){}
+    try{ saveStore(); }catch(e){}
+    showMsg(msg, "Đã gửi yêu cầu tới Admin. Khi Admin duyệt, đăng xuất và đăng nhập lại để đặt mật khẩu mới.", true);
+    toast("Đã gửi yêu cầu quên mật khẩu tới Admin");
+  });
+
   /* ---------- Rút tiền ---------- */
   function showMsg(el, text, ok){
     el.textContent = text;
@@ -1691,6 +1895,27 @@
 
   /* ================= TÀI KHOẢN / THIẾT BỊ / ADMIN ================= */
   var ADMIN_USERNAME = "nongquocthien";
+  /* Tài khoản đã bị XÓA hẳn khỏi hệ thống theo yêu cầu của Admin:
+     mỗi lần trang tải, dữ liệu của các username này (tài khoản, gắn kết thiết bị,
+     yêu cầu quên mật khẩu, nhật ký) bị gỡ sạch khỏi bộ nhớ đã lưu và không đăng nhập lại được. */
+  var REMOVED_USERNAMES = ["vuianh"];
+  function purgeRemovedAccounts(){
+    var changed = false;
+    REMOVED_USERNAMES.forEach(function(key){
+      var acc = accounts[key];
+      if(acc){
+        if(acc.id && usedIds[acc.id]) delete usedIds[acc.id];
+        delete accounts[key];
+        changed = true;
+      }
+      Object.keys(deviceOwners).forEach(function(fp){ if(deviceOwners[fp] === key){ delete deviceOwners[fp]; changed = true; } });
+      var nf = forgotRequests.filter(function(r){ return r.key !== key && (r.username || "").toLowerCase() !== key; });
+      if(nf.length !== forgotRequests.length){ forgotRequests = nf; changed = true; }
+      var nl = deviceLogs.filter(function(l){ return (l.username || "").toLowerCase() !== key; });
+      if(nl.length !== deviceLogs.length){ deviceLogs = nl; changed = true; }
+    });
+    return changed;
+  }
   var accounts = {};        // usernameLower -> {username, id, passHash, fingerprint, role}
   var usedIds = {};         // ID 7 số đã cấp
   var deviceOwners = {};    // fingerprint -> usernameLower (1 thiết bị = 1 tài khoản)
@@ -1825,14 +2050,25 @@
     if(!currentUser) return;
     var initial = currentUser.username.charAt(0).toUpperCase();
     document.getElementById("ucAvatar").textContent = initial;
-    document.getElementById("ucName").textContent = "@" + currentUser.username;
+    var ucNameEl = document.getElementById("ucName");
+    ucNameEl.innerHTML = "@" + esc(currentUser.username) + (currentUser.verified ? vTickHTML(true) : "");
     document.getElementById("ucId").textContent = "ID: " + currentUser.id;
+    var ucV = document.getElementById("ucVerified"); if(ucV) ucV.hidden = !currentUser.verified;
+    var ucW = document.getElementById("ucWarn"); var ucWT = document.getElementById("ucWarnText");
+    var wc = acctWarnCount(currentUser);
+    if(ucW) ucW.hidden = wc === 0;
+    if(ucWT) ucWT.textContent = "Cảnh báo vi phạm: " + wc + " lần";
     var role = document.getElementById("ucRole");
     if(isAdmin(currentUser)){ role.textContent = "Admin"; role.classList.add("admin"); }
     else { role.textContent = "Người xem"; role.classList.remove("admin"); }
-    document.getElementById("adminSection").hidden = !isAdmin(currentUser);
+    var adm = isAdmin(currentUser);
+    document.getElementById("adminSection").hidden = !adm;
+    /* Admin: chỉ hiện Khu vực Admin — ẩn menu 1-2-3-4 và huy hiệu cấp độ người xem */
+    ["secStats","secBalance","secWithdraw","secDevice","secPassword"].forEach(function(id){ var el = document.getElementById(id); if(el) el.hidden = adm; });
+    var lv = document.getElementById("ucLevel"); if(lv) lv.hidden = adm;
     document.getElementById("openProfile").textContent = initial;
     renderDevice(); renderLogs(); renderAdminAccounts(); renderAdminWithdrawals(); renderAdminForgot(); renderNotifications(); renderCheckin();
+    try{ renderMyPassword(); }catch(e){}
     try{ renderAdminOverview(); }catch(e){}
     try{ renderRevShare(); }catch(e){}
   }
@@ -1843,28 +2079,68 @@
   var acctOpenSecs = {};
   var admQuery = "";
 
+  function isAdminAcct(acc){
+    return !!acc && (acc.role === "admin" || (acc.username || "").toLowerCase() === ADMIN_USERNAME);
+  }
+  /* ===== MuXu v3.0: tích xanh + cảnh báo vi phạm ===== */
+  function vTickHTML(big){
+    return '<span class="v-tick' + (big ? " big" : "") + '" title="Tài khoản đã xác thực (tích xanh)" aria-label="Đã xác thực"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>';
+  }
+  function acctWarnings(acc){ if(!acc.warnings) acc.warnings = []; return acc.warnings; }
+  function acctWarnCount(acc){ return acctWarnings(acc).length; }
   function acctStatusBadge(acc){
-    if(acc.role === "admin") return '<span class="st-badge adm">Admin</span>';
+    if(isAdminAcct(acc)) return '<span class="st-badge adm">Admin</span>';
     return acc.locked ? '<span class="st-badge off">Đã khóa</span>' : '<span class="st-badge on">Đang hoạt động</span>';
+  }
+  function acctNameHTML(acc, big){
+    return '<span class="mname">@' + esc(acc.username) + (acc.verified ? vTickHTML(big) : "") + '</span>';
   }
   function renderAdminAccounts(){
     var box = document.getElementById("adminAcctList");
     if(!box) return;
     if(!isAdmin(currentUser)){ box.innerHTML = ""; return; }
     var keys = Object.keys(accounts);
+    /* Tài khoản Admin cũng hiện trong Quản lý tài khoản như mọi tài khoản khác:
+       đảm bảo tài khoản Admin đang đăng nhập luôn có mặt trong danh sách. */
+    if(currentUser){
+      var selfKey = currentUser.username.toLowerCase();
+      if(accounts[selfKey] && keys.indexOf(selfKey) < 0) keys.push(selfKey);
+    }
     if(admQuery){
       var q = admQuery.toLowerCase();
       keys = keys.filter(function(k){ var a = accounts[k]; return a.username.toLowerCase().indexOf(q) >= 0 || String(a.id).indexOf(q) >= 0; });
     }
     if(!keys.length){ box.innerHTML = '<div class="empty-note">' + (admQuery ? "Không tìm thấy tài khoản nào khớp tìm kiếm." : "Chưa có tài khoản nào.") + '</div>'; return; }
-    keys.sort(function(a,b){ return accounts[a].id - accounts[b].id; });
+    /* Admin xếp đầu danh sách, các tài khoản còn lại theo ID tăng dần */
+    keys.sort(function(a,b){
+      var aa = isAdminAcct(accounts[a]) ? 0 : 1, bb = isAdminAcct(accounts[b]) ? 0 : 1;
+      if(aa !== bb) return aa - bb;
+      return accounts[a].id - accounts[b].id;
+    });
     box.innerHTML = keys.map(function(k){
       var a = accounts[k];
-      return '<button type="button" class="acct-row" data-acct="' + esc(k) + '">' +
+      var lockBtn = isAdminAcct(a) ? "" : '<span class="lock-mini' + (a.locked ? " unlock" : "") + '" data-lock="' + esc(k) + '" role="button" title="' + (a.locked ? "Mở khóa tài khoản này" : "Khóa tài khoản này") + '">' + (a.locked ? "Mở khóa" : "Khóa") + '</span>';
+      var sub = 'ID: ' + a.id + ' · ' + esc(a.device ? a.device.device : "—") + ' · ' + fmtCoin(acctCoins(a) - (a.requestedTotal||0)) + ' xu';
+      if(isAdminAcct(a)) sub = 'Tài khoản Admin · ' + sub;
+      if(a.verified) sub += ' · ✓ Tích xanh';
+      var wc2 = acctWarnCount(a); if(wc2) sub += ' · ⚠ ' + wc2 + ' cảnh báo';
+      sub += ' · Bấm để mở menu quản lý';
+      return '<button type="button" class="acct-row" data-acct="' + esc(k) + '" title="Bấm vào tên người dùng để mở menu quản lý tài khoản">' +
         '<span class="a-av">' + esc(a.username.charAt(0).toUpperCase()) + '</span>' +
-        '<span class="a-main"><b>@' + esc(a.username) + '</b><span>ID: ' + a.id + ' · ' + esc(a.device ? a.device.device : "—") + '</span></span>' +
-        acctStatusBadge(a) + '</button>';
+        '<span class="a-main"><b>' + acctNameHTML(a, false) + '</b><span>' + sub + '</span></span>' +
+        lockBtn + acctStatusBadge(a) + '</button>';
     }).join("");
+    box.querySelectorAll("[data-lock]").forEach(function(sp){
+      sp.addEventListener("click", function(ev){
+        ev.stopPropagation(); ev.preventDefault();
+        var k = sp.getAttribute("data-lock"); var a = accounts[k]; if(!a || isAdminAcct(a)) return;
+        a.locked = !a.locked;
+        addLog(a.locked ? "Admin khóa tài khoản" : "Admin mở khóa tài khoản", a.username, a.locked, "Khóa nhanh từ danh sách · ID " + a.id);
+        toast(a.locked ? "Đã khóa @" + a.username : "Đã mở khóa @" + a.username);
+        try{ saveStore(); }catch(e){}
+        renderAdminAccounts();
+      });
+    });
     box.querySelectorAll("[data-acct]").forEach(function(btn){
       btn.addEventListener("click", function(){ openAcctDetail(btn.getAttribute("data-acct")); });
     });
@@ -1880,6 +2156,7 @@
   });
 
   function openAcctDetail(key){
+    try{ closeAllAdminSubs(); }catch(e){}
     watchPaused = true; haltTimers();   // vào Admin: dừng đếm ngay, không tính lượt đang xem dở
     selectedAcctKey = key; confirmDeleteKey = null;
     renderAcctDetail();
@@ -1887,6 +2164,7 @@
     pauseWatching();
   }
   function closeAcctDetail(){
+    try{ collapseProfileSections(); }catch(e){}
     selectedAcctKey = null; confirmDeleteKey = null;
     document.getElementById("acctView").hidden = true;
     renderAdminAccounts();
@@ -1931,6 +2209,41 @@
     }
   });
 
+  /* ===== ADMIN: menu con gọn — bấm mới mở, mở mục này tự đóng mục kia,
+     bấm ra ngoài / đóng Trang cá nhân / mở chi tiết tài khoản / thoát (Esc) là tự thu lại hết ===== */
+  function closeAllAdminSubs(){
+    document.querySelectorAll(".adm-sub.open").forEach(function(s){
+      s.classList.remove("open");
+      var b = s.querySelector(".adm-sub-body"); if(b) b.hidden = true;
+      var h = s.querySelector(".adm-sub-head"); if(h) h.setAttribute("aria-expanded","false");
+    });
+  }
+  function collapseProfileSections(){
+    document.querySelectorAll("#profileView .section.open, #acctView .section.open").forEach(function(s){
+      s.classList.remove("open");
+      var b = s.querySelector(".section-body"); if(b) b.hidden = true;
+      var h = s.querySelector(".section-head"); if(h) h.setAttribute("aria-expanded","false");
+    });
+    acctOpenSecs = {};
+  }
+  document.addEventListener("click", function(e){
+    var head = e.target && e.target.closest ? e.target.closest(".adm-sub-head") : null;
+    if(head){
+      var sub = head.parentElement;
+      var body = sub ? sub.querySelector(".adm-sub-body") : null;
+      if(!body) return;
+      var willOpen = body.hidden;
+      closeAllAdminSubs();
+      if(willOpen){ body.hidden = false; sub.classList.add("open"); head.setAttribute("aria-expanded","true"); }
+      return;
+    }
+    /* Bấm vào bất cứ chỗ nào KHÔNG nằm trong một menu Admin đang mở -> tự thu lại gọn gàng.
+       (Bấm bên trong nội dung menu đang mở, ví dụ gõ ô nhập / bấm Duyệt, thì giữ nguyên.) */
+    var insideOpen = e.target && e.target.closest ? e.target.closest(".adm-sub-body") : null;
+    if(!insideOpen) closeAllAdminSubs();
+  });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape"){ closeAllAdminSubs(); collapseProfileSections(); } });
+
   function renderAcctDetail(){
     var box = document.getElementById("acctDetail");
     var acc = selectedAcctKey ? accounts[selectedAcctKey] : null;
@@ -1938,10 +2251,12 @@
     if(!acc){ box.innerHTML = '<div class="empty-note">Tài khoản không còn tồn tại.</div>'; return; }
     var d = acc.device || {};
     var bal = acctCoins(acc) - (acc.requestedTotal || 0);
-    var isSelfAdmin = acc.role === "admin";
+    var isSelfAdmin = isAdminAcct(acc);
     var rows =
       '<div><span>Trạng thái</span><b>' + (isSelfAdmin ? "Admin" : (acc.locked ? "Đã khóa" : "Đang hoạt động")) + '</b></div>' +
       '<div><span>Vai trò</span><b>' + (isSelfAdmin ? "Admin (toàn quyền)" : "Người xem") + '</b></div>' +
+      '<div><span>Tích xanh</span><b>' + (acc.verified ? "✓ Đã có tích xanh" + (acc.verifiedAt ? " · cấp " + esc(new Date(acc.verifiedAt).toLocaleString("vi-VN")) : "") : "Chưa có") + '</b></div>' +
+      '<div><span>Cảnh báo vi phạm</span><b>' + acctWarnCount(acc) + ' lần</b></div>' +
       '<div><span>ID người dùng</span><b>' + acc.id + '</b></div>' +
       '<div><span>Ngày đăng ký</span><b>' + esc(acc.createdAt ? acc.createdAt.toLocaleString("vi-VN") : "—") + '</b></div>' +
       '<div><span>Tên thiết bị</span><b>' + esc(d.device || "—") + '</b></div>' +
@@ -1969,28 +2284,91 @@
       : '<div class="empty-note">Chưa có yêu cầu rút tiền nào.</div>';
     var logs = deviceLogs.filter(function(l){ return l.username === acc.username; });
     var logHTML = logs.length ? logs.map(logItemHTML).join("") : '<div class="empty-note">Chưa có nhật ký nào.</div>';
-    var actions = isSelfAdmin
-      ? ''
-      : '<div class="acct-actions">' +
-          '<button type="button" class="btn ' + (acc.locked ? "ghost" : "warn") + '" data-act="lock">' + (acc.locked ? "Mở khóa tài khoản" : "Khóa tài khoản") + '</button>' +
-          '<button type="button" class="btn ghost" data-act="resetlogin">Xóa khóa đăng nhập sai</button>' +
-          '<button type="button" class="btn ghost" data-act="resetpass">Cấp mật khẩu tạm</button>' +
-          '<button type="button" class="btn ghost" data-act="rebind">Đặt lại thiết bị gắn kết</button>' +
-          '<button type="button" class="btn danger" data-act="delete">' + (confirmDeleteKey === selectedAcctKey ? "Bấm lần nữa để XÓA hẳn" : "Xóa tài khoản") + '</button>' +
+    var adminTools =
+        '<div style="margin-top:14px;border-top:1px solid var(--line);padding-top:14px">' +
+          '<div class="field"><label for="acctCoinAdj">Cộng / trừ xu (nhập số âm để trừ)</label><input id="acctCoinAdj" type="number" step="0.001" placeholder="Ví dụ: 100 hoặc -50" inputmode="decimal"/></div>' +
         '</div>';
+    var actions = '<div class="acct-actions">' +
+          (isSelfAdmin ? '' : '<button type="button" class="btn ' + (acc.locked ? "ghost" : "warn") + '" data-act="lock">' + (acc.locked ? "Mở khóa tài khoản" : "Khóa tài khoản") + '</button>') +
+          '<button type="button" class="btn ghost" data-act="coinadj">Áp dụng cộng / trừ xu</button>' +
+          '<button type="button" class="btn ghost" data-act="rebind">Đặt lại thiết bị gắn kết</button>' +
+          (isSelfAdmin ? '' : '<button type="button" class="btn danger" data-act="delete">' + (confirmDeleteKey === selectedAcctKey ? "Bấm lần nữa để XÓA hẳn" : "Xóa tài khoản") + '</button>') +
+        '</div>' +
+        (isSelfAdmin ? '<p class="rate-note">Đây là tài khoản Admin — vẫn hiện trong Quản lý tài khoản như mọi tài khoản khác. Khóa / xóa không áp dụng cho tài khoản Admin để tránh tự khóa hệ thống; toàn bộ mục mật khẩu nằm ở mục “Đổi / quên mật khẩu” ngay bên dưới.</p>' : '');
+    /* ===== Đổi / quên mật khẩu của CHÍNH tài khoản này — chỉ hiện trong Chi tiết tài khoản ===== */
+    var myFg = [];
+    forgotRequests.forEach(function(r, idx){ if(r.key === selectedAcctKey) myFg.push({ r:r, idx:idx }); });
+    var pendingFg = myFg.filter(function(it){ return it.r.status === "pending"; }).length;
+    var fgHTML = myFg.length ? myFg.map(function(it){
+        var r = it.r;
+        var right = r.status === "pending"
+          ? '<span class="wd-actions"><button type="button" class="mini-btn ok" data-fg-act="approve" data-fg-idx="' + it.idx + '">Duyệt</button>' +
+            '<button type="button" class="mini-btn no" data-fg-act="reject" data-fg-idx="' + it.idx + '">Từ chối</button></span>'
+          : fgStatusBadge(r);
+        return '<div class="history-item"><div><b>Yêu cầu quên mật khẩu</b><span>Ngày tham gia: ' + esc(r.joinedAt ? new Date(r.joinedAt).toLocaleString("vi-VN") : "—") + '<br/>Ngày gửi yêu cầu: ' + esc(r.time ? new Date(r.time).toLocaleString("vi-VN") : "—") + '</span></div>' + right + '</div>';
+      }).join("")
+      : '<div class="empty-note">Tài khoản này chưa có yêu cầu quên mật khẩu nào.</div>';
+    var passTools =
+      '<div class="field"><label for="acctNewPass">Đổi mật khẩu cho tài khoản này</label><input id="acctNewPass" type="text" placeholder="Nhập mật khẩu mới (ít nhất 6 ký tự)" autocomplete="off"/><div class="hint">Bấm “Đặt mật khẩu mới” là mật khẩu cũ mất hiệu lực ngay.</div></div>' +
+      '<div class="acct-actions">' +
+        '<button type="button" class="btn ghost" data-act="setpass">Đặt mật khẩu mới</button>' +
+        '<button type="button" class="btn ghost" data-act="resetpass">Cấp mật khẩu tạm</button>' +
+        '<button type="button" class="btn ghost" data-act="forcepass">' + (acc.forceNewPass ? "Hủy bắt đổi mật khẩu" : "Bắt đổi mật khẩu khi đăng nhập") + '</button>' +
+        '<button type="button" class="btn ghost" data-act="resetlogin">Xóa khóa đăng nhập sai</button>' +
+      '</div>' +
+      (acc.forceNewPass ? '<div class="notice">Tài khoản này đang bị bắt đổi mật khẩu: lần đăng nhập tiếp theo người dùng phải đặt mật khẩu mới.</div>' : '') +
+      (acc.tempPass ? '<div class="notice">Mật khẩu tạm của @' + esc(acc.username) + ': <b>' + esc(acc.tempPass) + '</b> — đưa mật khẩu này cho người dùng để họ đăng nhập.</div>' : '') +
+      '<div class="history" style="margin-top:14px"><h4>Yêu cầu quên mật khẩu của tài khoản này' + (pendingFg ? ' · ' + pendingFg + ' chờ duyệt' : '') + '</h4>' + fgHTML + '</div>';
+    /* ===== v3.0: Tích xanh (cấp / thu hồi cùng 1 mục) ===== */
+    var verifyTools =
+      '<p class="rate-note" style="margin:0 0 12px">Trạng thái hiện tại: <b style="color:#fff">' + (acc.verified ? "✓ Đã có tích xanh" : "Chưa có tích xanh") + '</b>' + (acc.verified && acc.verifiedAt ? " · Cấp lúc " + esc(new Date(acc.verifiedAt).toLocaleString("vi-VN")) : "") + '. Tích xanh hiện ngay cạnh tên người dùng ở khắp MuXu.</p>' +
+      '<div class="acct-actions">' +
+        (acc.verified
+          ? '<button type="button" class="btn warn" data-act="unverify">Thu hồi tích xanh</button>'
+          : '<button type="button" class="btn primary" data-act="verify" style="background:#1d9bf0">Cấp tích xanh</button>') +
+        '<button type="button" class="btn ghost" data-act="verifyinfo">' + (acc.verified ? "Xem thông tin tích xanh" : "Tài khoản này là Admin?") + '</button>' +
+      '</div>' +
+      (isSelfAdmin ? '<p class="rate-note">Đây là tài khoản Admin — vẫn cấp / thu hồi tích xanh bình thường tại mục này.</p>' : '');
+    /* ===== v3.0: Cảnh báo vi phạm ===== */
+    var warns = acctWarnings(acc);
+    var warnListHTML = warns.length ? warns.map(function(w){
+        return '<div class="warn-item"><b>Cảnh báo ' + esc(w.level || "Nhẹ") + '</b><span>' + esc(w.reason || "—") + '</span><span>' + esc(w.time ? new Date(w.time).toLocaleString("vi-VN") : "") + ' · bởi Admin</span></div>';
+      }).join("") : '<div class="empty-note">Chưa có cảnh báo vi phạm nào.</div>';
+    var warnTools =
+      '<div class="field"><label for="acctWarnLevel">Mức cảnh báo</label><select id="acctWarnLevel"><option value="Nhẹ">Nhẹ — nhắc nhở</option><option value="Trung bình">Trung bình — vi phạm lặp lại</option><option value="Nặng">Nặng — xem xét khóa tài khoản</option></select></div>' +
+      '<div class="field"><label for="acctWarnReason">Lý do cảnh báo</label><input id="acctWarnReason" type="text" placeholder="Ví dụ: Xem quảng cáo bất thường, nghi gian lận…" autocomplete="off"/></div>' +
+      '<div class="acct-actions">' +
+        '<button type="button" class="btn warn" data-act="warn">Gửi cảnh báo vi phạm</button>' +
+        '<button type="button" class="btn ghost" data-act="clearwarn"' + (warns.length ? "" : " disabled") + '>Xóa hết cảnh báo (' + warns.length + ')</button>' +
+      '</div>' +
+      '<p class="rate-note">Cảnh báo được gửi thẳng vào mục Thông báo của người dùng và ghi vào nhật ký. Đủ 3 cảnh báo, Admin nên khóa tài khoản ở mục Thông tin chi tiết.</p>' +
+      '<div class="history" style="margin-top:12px"><h4>Lịch sử cảnh báo (' + warns.length + ')</h4>' + warnListHTML + '</div>';
+    /* ===== v3.0: Gửi thông báo + thao tác nhanh khác ===== */
+    var notiTools =
+      '<div class="field"><label for="acctNotiText">Nội dung thông báo gửi cho @' + esc(acc.username) + '</label><input id="acctNotiText" type="text" placeholder="Nhập nội dung thông báo…" autocomplete="off"/></div>' +
+      '<div class="acct-actions">' +
+        '<button type="button" class="btn ghost" data-act="sendnoti">Gửi thông báo</button>' +
+        '<button type="button" class="btn ghost" data-act="resetstats">Đặt lại thống kê xem</button>' +
+      '</div>';
     box.innerHTML =
       '<div class="user-card">' +
         '<div class="avatar">' + esc(acc.username.charAt(0).toUpperCase()) + '</div>' +
-        '<div class="name">@' + esc(acc.username) + '</div>' +
-        '<div class="id">ID: ' + acc.id + '</div>' +
-        '<div style="margin-top:8px">' + acctStatusBadge(acc) + '</div>' +
+        '<div class="name">' + acctNameHTML(acc, true) + '</div>' +
+        '<div class="id">ID: ' + acc.id + ' · Menu quản lý tài khoản — MuXu v3.0</div>' +
+        '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;justify-content:center">' + acctStatusBadge(acc) + (acc.verified ? '<span class="st-badge ver">✓ Tích xanh</span>' : '') + (acctWarnCount(acc) ? '<span class="st-badge warn1">⚠ ' + acctWarnCount(acc) + ' cảnh báo</span>' : '') + '</div>' +
       '</div>' +
-      '<div class="section' + (acctOpenSecs.info ? " open" : "") + '" data-sec="info"><div class="section-head"><h3>Thông tin chi tiết</h3></div><div class="section-body"' + (acctOpenSecs.info ? "" : " hidden") + '><div class="device-rows">' + rows + '</div>' + actions +
-        (acc.tempPass ? '<div class="notice">Mật khẩu tạm của @' + esc(acc.username) + ': <b>' + esc(acc.tempPass) + '</b> — đưa mật khẩu này cho người dùng để họ đăng nhập.</div>' : "") + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.info ? " open" : "") + '" data-sec="info"><div class="section-head"><h3>Thông tin chi tiết</h3></div><div class="section-body"' + (acctOpenSecs.info ? "" : " hidden") + '><div class="device-rows">' + rows + '</div>' + adminTools + actions + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.verify ? " open" : "") + '" data-sec="verify"><div class="section-head"><h3>Tích xanh</h3>' + (acc.verified ? '<span class="st-badge ver">✓ Đang có</span>' : '<span>Chưa có</span>') + '</div><div class="section-body"' + (acctOpenSecs.verify ? "" : " hidden") + '>' + verifyTools + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.warn ? " open" : "") + '" data-sec="warn"><div class="section-head"><h3>Cảnh báo vi phạm</h3>' + (acctWarnCount(acc) ? '<span class="noti-dot">' + acctWarnCount(acc) + '</span>' : '') + '</div><div class="section-body"' + (acctOpenSecs.warn ? "" : " hidden") + '>' + warnTools + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.noti ? " open" : "") + '" data-sec="noti"><div class="section-head"><h3>Gửi thông báo &amp; thao tác khác</h3></div><div class="section-body"' + (acctOpenSecs.noti ? "" : " hidden") + '>' + notiTools + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.pass ? " open" : "") + '" data-sec="pass"><div class="section-head"><h3>Đổi / quên mật khẩu · Cấp lại mật khẩu</h3>' + (pendingFg ? '<span class="noti-dot" title="Yêu cầu quên mật khẩu chờ duyệt">' + pendingFg + '</span>' : '') + '</div><div class="section-body"' + (acctOpenSecs.pass ? "" : " hidden") + '>' + passTools + '</div></div>' +
       '<div class="section' + (acctOpenSecs.wd ? " open" : "") + '" data-sec="wd"><div class="section-head"><h3>Yêu cầu rút tiền</h3></div><div class="section-body"' + (acctOpenSecs.wd ? "" : " hidden") + '>' + wd + '</div></div>' +
       '<div class="section' + (acctOpenSecs.logs ? " open" : "") + '" data-sec="logs"><div class="section-head"><h3>Nhật ký thiết bị của tài khoản</h3></div><div class="section-body"' + (acctOpenSecs.logs ? "" : " hidden") + '><div id="acctLogList">' + logHTML + '</div></div></div>';
     box.querySelectorAll("[data-act]").forEach(function(btn){
       btn.addEventListener("click", function(){ acctAction(btn.getAttribute("data-act")); });
+    });
+    box.querySelectorAll("[data-fg-act]").forEach(function(btn){
+      btn.addEventListener("click", function(){ acctForgotAction(btn); });
     });
   }
 
@@ -2011,9 +2389,92 @@
       acc.tempPass = temp;
       acc.passHash = hashStr(temp + "|" + selectedAcctKey);
       delete loginFails[selectedAcctKey];
-      acctOpenSecs = { info:true };
+      acctOpenSecs = { pass:true };
       addLog("Admin cấp mật khẩu tạm", acc.username, false, "ID " + acc.id);
       toast("Đã cấp mật khẩu tạm cho @" + acc.username);
+    } else if(act === "setpass"){
+      var np = document.getElementById("acctNewPass");
+      var v = np ? np.value : "";
+      if(!v || v.length < 6){ toast("Mật khẩu mới phải có ít nhất 6 ký tự"); return; }
+      acc.passHash = hashStr(v + "|" + selectedAcctKey);
+      delete acc.tempPass; acc.forceNewPass = false; delete loginFails[selectedAcctKey];
+      addLog("Admin đổi mật khẩu tài khoản", acc.username, false, "ID " + acc.id + " · mật khẩu cũ đã mất hiệu lực");
+      try{ saveStore(); }catch(e){}
+      toast("Đã đổi mật khẩu cho @" + acc.username);
+    } else if(act === "forcepass"){
+      acc.forceNewPass = !acc.forceNewPass;
+      addLog(acc.forceNewPass ? "Admin bắt đổi mật khẩu" : "Admin hủy bắt đổi mật khẩu", acc.username, false, "ID " + acc.id);
+      try{ saveStore(); }catch(e){}
+      toast(acc.forceNewPass ? "@" + acc.username + " sẽ phải đặt mật khẩu mới khi đăng nhập" : "Đã hủy bắt đổi mật khẩu của @" + acc.username);
+    } else if(act === "coinadj"){
+      var ci = document.getElementById("acctCoinAdj");
+      var amt = ci ? parseFloat(ci.value) : NaN;
+      if(isNaN(amt) || amt === 0){ toast("Nhập số xu cần cộng hoặc trừ trước"); return; }
+      var newCoins = Math.round(((acc.coins || 0) + amt) * 1000) / 1000;
+      if(newCoins < (acc.requestedTotal || 0)){ toast("Không trừ được: xu còn lại nhỏ hơn số đã yêu cầu rút"); return; }
+      acc.coins = Math.max(0, newCoins);
+      if(acc === currentUser){ state.coins = acc.coins; renderStats(); }
+      addLog(amt > 0 ? "Admin cộng xu" : "Admin trừ xu", acc.username, false, (amt > 0 ? "+" : "") + fmtCoin(amt) + " xu · ID " + acc.id);
+      addNotification(selectedAcctKey, amt > 0 ? "Admin cộng xu" : "Admin trừ xu", "Tài khoản của bạn được " + (amt > 0 ? "cộng +" : "trừ ") + fmtCoin(Math.abs(amt)) + " xu. Số dư hiện tại: " + fmtCoin(acc.coins - (acc.requestedTotal||0)) + " xu.");
+      try{ saveStore(); }catch(e){}
+      toast("Đã " + (amt > 0 ? "cộng +" : "trừ ") + fmtCoin(Math.abs(amt)) + " xu cho @" + acc.username);
+    } else if(act === "verify"){
+      acc.verified = true; acc.verifiedAt = new Date().toISOString();
+      acctOpenSecs = { verify:true };
+      addLog("Admin cấp tích xanh", acc.username, false, "ID " + acc.id);
+      addNotification(selectedAcctKey, "Tài khoản đã được cấp tích xanh ✓", "Chúc mừng! Tài khoản @" + acc.username + " của bạn đã được Admin cấp tích xanh trên MuXu.");
+      try{ saveStore(); }catch(e){}
+      toast("Đã cấp tích xanh cho @" + acc.username);
+      if(acc === currentUser) renderAccount();
+    } else if(act === "unverify"){
+      acc.verified = false; delete acc.verifiedAt;
+      acctOpenSecs = { verify:true };
+      addLog("Admin thu hồi tích xanh", acc.username, true, "ID " + acc.id);
+      addNotification(selectedAcctKey, "Tích xanh đã bị thu hồi", "Tài khoản @" + acc.username + " của bạn đã bị Admin thu hồi tích xanh trên MuXu.");
+      try{ saveStore(); }catch(e){}
+      toast("Đã thu hồi tích xanh của @" + acc.username);
+      if(acc === currentUser) renderAccount();
+    } else if(act === "verifyinfo"){
+      toast(acc.verified ? ("@" + acc.username + " đang có tích xanh" + (acc.verifiedAt ? " từ " + new Date(acc.verifiedAt).toLocaleString("vi-VN") : "")) : (isSelfAdmin ? "Tài khoản Admin vẫn cấp tích xanh được ở nút bên cạnh" : "@" + acc.username + " chưa có tích xanh — bấm Cấp tích xanh để cấp"));
+      return;
+    } else if(act === "warn"){
+      var wl = document.getElementById("acctWarnLevel");
+      var wr = document.getElementById("acctWarnReason");
+      var level = wl ? wl.value : "Nhẹ";
+      var reason = wr ? wr.value.trim() : "";
+      if(!reason){ toast("Nhập lý do cảnh báo trước"); return; }
+      acctWarnings(acc).unshift({ time: new Date().toISOString(), level: level, reason: reason });
+      acctOpenSecs = { warn:true };
+      addLog("Admin cảnh báo vi phạm", acc.username, true, "Mức " + level + " · " + reason + " · tổng " + acctWarnCount(acc) + " cảnh báo");
+      addNotification(selectedAcctKey, "Cảnh báo vi phạm (" + level + ")", "Admin cảnh báo: " + reason + ". Đây là cảnh báo thứ " + acctWarnCount(acc) + " của tài khoản. Vi phạm tiếp có thể bị khóa tài khoản.");
+      try{ saveStore(); }catch(e){}
+      toast("Đã gửi cảnh báo " + level + " cho @" + acc.username + " (" + acctWarnCount(acc) + " lần)");
+      if(acc === currentUser) renderAccount();
+    } else if(act === "clearwarn"){
+      var n = acctWarnCount(acc);
+      acc.warnings = [];
+      acctOpenSecs = { warn:true };
+      addLog("Admin xóa cảnh báo vi phạm", acc.username, false, "Đã xóa " + n + " cảnh báo · ID " + acc.id);
+      addNotification(selectedAcctKey, "Đã xóa cảnh báo vi phạm", "Admin đã xóa toàn bộ " + n + " cảnh báo vi phạm của tài khoản bạn.");
+      try{ saveStore(); }catch(e){}
+      toast("Đã xóa " + n + " cảnh báo của @" + acc.username);
+      if(acc === currentUser) renderAccount();
+    } else if(act === "sendnoti"){
+      var nt = document.getElementById("acctNotiText");
+      var txt = nt ? nt.value.trim() : "";
+      if(!txt){ toast("Nhập nội dung thông báo trước"); return; }
+      acctOpenSecs = { noti:true };
+      addNotification(selectedAcctKey, "Thông báo từ Admin", txt);
+      addLog("Admin gửi thông báo", acc.username, false, txt);
+      try{ saveStore(); }catch(e){}
+      toast("Đã gửi thông báo cho @" + acc.username);
+    } else if(act === "resetstats"){
+      acc.watchedCount = 0; acc.fullCount = 0; acc.partialCount = 0; acc.watchSeconds = 0;
+      if(acc === currentUser){ state.fullCount = 0; state.partialCount = 0; state.watchSeconds = 0; state.watchedCount = 0; renderStats(); }
+      acctOpenSecs = { noti:true };
+      addLog("Admin đặt lại thống kê xem", acc.username, false, "ID " + acc.id + " · số dư xu giữ nguyên");
+      try{ saveStore(); }catch(e){}
+      toast("Đã đặt lại thống kê xem của @" + acc.username + " (số dư giữ nguyên)");
     } else if(act === "rebind"){
       acc.fingerprint = "";
       addLog("Admin đặt lại thiết bị", acc.username, false, "Tài khoản sẽ gắn với thiết bị ở lần đăng nhập sau");
@@ -2094,6 +2555,7 @@
   syncRgSubmit();
 
   function validateRegister(msg){
+    if(sysCtrl.allowRegister === false){ showMsg(msg, "⛔ Hệ thống đang tạm đóng đăng ký tài khoản mới. Vui lòng quay lại sau.", false); return null; }
     var user = document.getElementById("rgUser").value.trim();
     var pass = document.getElementById("rgPass").value;
     var pass2 = document.getElementById("rgPass2").value;
@@ -2101,6 +2563,7 @@
     if(!/^[a-zA-Z0-9_]{4,20}$/.test(user)){ showMsg(msg, "Username phải dài 4–20 ký tự, chỉ gồm chữ, số và dấu gạch dưới.", false); return null; }
     if(pass.length < 6){ showMsg(msg, "Mật khẩu phải có ít nhất 6 ký tự.", false); return null; }
     if(pass !== pass2){ showMsg(msg, "Mật khẩu nhập lại chưa khớp.", false); return null; }
+    if(REMOVED_USERNAMES.indexOf(key) >= 0){ showMsg(msg, "Username @" + user + " đã bị xóa khỏi hệ thống nên không đăng ký lại được.", false); return null; }
     if(accounts[key]){ showMsg(msg, "Username @" + user + " đã có người đăng ký. Hãy chọn username khác hoặc đăng nhập.", false); return null; }
     /* ANTI: 1 thiết bị chỉ 1 tài khoản — chặn ngay tài khoản thứ 2 */
     if(deviceOwners[fingerprint] && deviceOwners[fingerprint] !== key){
@@ -2134,7 +2597,7 @@
     var acc = {
       username: v.user, id: genUserId(), passHash: hashStr(v.pass + "|" + v.key), fingerprint: fingerprint,
       role: v.key === ADMIN_USERNAME ? "admin" : "viewer",
-      locked: false, createdAt: new Date(), watchedCount: 0, fullCount: 0, partialCount: 0, watchSeconds: 0, coins: 0, coinsFull: 0, coinsPartial: 0, highWins: 0, requestedTotal: 0, requests: [], notifications: [], checkin: { lastDate:"", streak:0, total:0, coins:0, dates:[] }, rewardLog: [], daily: {},
+      locked: false, verified: false, warnings: [], createdAt: new Date(), watchedCount: 0, fullCount: 0, partialCount: 0, watchSeconds: 0, coins: 0, coinsFull: 0, coinsPartial: 0, highWins: 0, requestedTotal: 0, requests: [], notifications: [], checkin: { lastDate:"", streak:0, total:0, coins:0, dates:[] }, rewardLog: [], daily: {},
       device: { device: deviceInfo.device, os: deviceInfo.os, browser: deviceInfo.browser,
                 network: deviceInfo.network, ip: deviceInfo.ip, screen: deviceInfo.screen,
                 tz: deviceInfo.tz, lang: deviceInfo.lang }
@@ -2162,11 +2625,17 @@
     var user = document.getElementById("liUser").value.trim();
     var pass = document.getElementById("liPass").value;
     var key = user.toLowerCase();
+    if(REMOVED_USERNAMES.indexOf(key) >= 0){
+      showMsg(msg, "⛔ Tài khoản @" + user + " đã bị xóa khỏi hệ thống nên không đăng nhập được.", false); return;
+    }
     var fail = loginFails[key];
     if(fail && fail.lockedUntil && Date.now() < fail.lockedUntil){
       showMsg(msg, "Tài khoản tạm khóa vì đăng nhập sai nhiều lần. Thử lại sau " + Math.ceil((fail.lockedUntil - Date.now())/1000) + " giây.", false); return;
     }
     var acc = accounts[key];
+    if(sysCtrl.maintenance && !(acc && acc.role === "admin")){
+      showMsg(msg, "⛔ Hệ thống đang bảo trì. Vui lòng quay lại sau.", false); return;
+    }
     if(acc && acc.locked){
       addLog("Đăng nhập", acc.username, true, "Tài khoản đang bị Admin khóa");
       showMsg(msg, "⛔ Tài khoản này đã bị Admin khóa nên không đăng nhập được.", false); return;
