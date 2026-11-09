@@ -1,0 +1,2249 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="dark"/>
+<link rel="icon" href="data:,"/>
+<title>Web Video Kiểu TikTok</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<!--
+  KẾT NỐI GOOGLE ADSENSE (chỉ Admin): Chỉ tài khoản username "nongquocthien"
+  mới thấy mục "Kết nối AdSense" trong Trang cá nhân. Người xem thường không thấy.
+-->
+<style>
+  :root{
+    --bg:#000; --panel:#121212; --panel2:#1b1b1d; --line:rgba(255,255,255,.12);
+    --text:#fff; --muted:rgba(255,255,255,.72); --muted2:rgba(255,255,255,.48);
+    --accent:#fe2c55; --gold:#f5c518; --green:#22c07a; --cyan:#25f4ee;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  /* KHUNG CỨNG: trang ngoài khóa cứng, không cuộn / không nảy / không kéo giãn.
+     Chỉ các vùng bên trong khung (.feed, .pv-scroll, .auth-view) mới vuốt cuộn được. */
+  html,body{height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
+  html{position:fixed;inset:0;width:100%}
+  body{position:fixed;inset:0;width:100%;margin:0;background:#0a0a0a;color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+  input,select{font:inherit}
+  .app{position:absolute;inset:0;height:100%;height:100dvh;display:flex;flex-direction:column;max-width:520px;margin:0 auto;background:#000;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  @media(min-width:700px){.app{border-left:1px solid var(--line);border-right:1px solid var(--line)}}
+
+  /* Header — nút Thông báo + nút Trang cá nhân, luôn hiện ở giao diện chính */
+  .topbar{position:absolute;top:0;left:0;right:0;z-index:30;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 0;display:flex;justify-content:flex-end;align-items:center;gap:10px;pointer-events:none}
+  .profile-btn{pointer-events:auto;flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent);border:2px solid #fff;display:grid;place-items:center;font-weight:800;font-size:18px;box-shadow:0 4px 16px rgba(0,0,0,.45)}
+  .profile-btn:active{transform:scale(.96)}
+  .noti-btn{pointer-events:auto;position:relative;flex:none;width:44px;height:44px;border-radius:50%;background:rgba(20,20,22,.82);border:1.5px solid rgba(255,255,255,.85);display:grid;place-items:center;box-shadow:0 4px 16px rgba(0,0,0,.45);color:#fff}
+  .noti-btn:active{transform:scale(.96)}
+  .noti-btn svg{width:22px;height:22px}
+  .noti-btn .noti-count{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:99px;background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:0 5px;border:2px solid #000;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .checkin-btn{pointer-events:auto;flex:none;height:44px;padding:0 14px;border-radius:99px;background:var(--gold);border:2px solid #fff;display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 16px rgba(0,0,0,.45);color:#111;font-weight:800;font-size:13.5px;white-space:nowrap}
+  .checkin-btn[hidden]{display:none}
+  .checkin-btn:active{transform:scale(.96)}
+  .checkin-btn svg{width:20px;height:20px;flex:none}
+  .checkin-btn b{font-weight:800}
+
+  /* Luồng quảng cáo */
+  .feed{flex:1;min-height:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y}
+  .feed::-webkit-scrollbar{display:none}
+  .feed.locked{overflow-y:hidden;touch-action:none}
+  .ad-status.partial{color:var(--gold)}
+  .lock-hint{margin:12px 0 0;text-align:center;font-size:12.5px;line-height:1.55;color:#f3e2a0;background:rgba(245,197,24,.09);border:1px solid rgba(245,197,24,.32);border-radius:10px;padding:9px 12px}
+  .lock-hint.unlocked{color:#a9eccd;background:rgba(34,192,122,.1);border-color:rgba(34,192,122,.45)}
+  .skip-btn{display:block;margin:12px auto 0;padding:10px 16px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid var(--line);font-weight:700;font-size:13.5px;color:#fff}
+  .skip-btn:active{transform:scale(.98)}
+  .skip-btn[hidden]{display:none}
+  .slide{height:100%;min-height:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;display:flex;flex-direction:column;padding:78px 18px 22px;background:linear-gradient(180deg,#161616,#0b0b0c)}
+  .slide + .slide{border-top:1px solid var(--line)}
+  .ad-head{display:flex;align-items:center;gap:8px}
+  .ad-tag{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#111;background:var(--gold);padding:4px 9px;border-radius:5px}
+  .ad-no{font-size:12.5px;color:var(--muted2);font-weight:600}
+  .ad-status{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--muted)}
+  .ad-status.done{color:var(--green)}
+  .ad-slot{flex:1;margin-top:14px;border:1px solid rgba(255,255,255,.14);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:rgba(255,255,255,.03)}
+  .ad-ph-icon{width:64px;height:64px;border-radius:50%;border:1.5px solid rgba(255,255,255,.25);display:grid;place-items:center;color:rgba(255,255,255,.4)}
+  .ad-ph-icon svg{width:26px;height:26px;margin-left:3px}
+  .ad-real{width:100%;display:none}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:700;font-size:14.5px;padding:12px 20px;border-radius:10px}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.ghost{background:rgba(255,255,255,.08);border:1px solid var(--line)}
+  .btn.block{width:100%}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .view-progress{margin-top:16px}
+  .view-progress .bar{height:5px;border-radius:99px;background:rgba(255,255,255,.15);overflow:hidden}
+  .view-progress .bar i{display:block;height:100%;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:left center;transition:transform .12s linear;will-change:transform}
+
+  /* Trang cá nhân — toàn màn hình */
+  .profile-view{position:absolute;inset:0;z-index:50;background:#0e0e0f;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  .profile-view[hidden]{display:none}
+  .pv-head{flex:none;display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 12px;border-bottom:1px solid var(--line);background:var(--panel)}
+  .pv-head h2{margin:0;font-size:17px;flex:1;text-align:center}
+  .back-btn,.spacer{width:40px;height:40px;flex:none;display:grid;place-items:center}
+  .back-btn svg{width:24px;height:24px}
+  .pv-scroll{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:none}
+  .pv-scroll::-webkit-scrollbar{display:none}
+  .user-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px 0 20px;border-bottom:1px solid var(--line)}
+  .user-card .avatar{width:76px;height:76px;border-radius:50%;border:2px solid #fff;background:var(--accent);display:grid;place-items:center;font-weight:800;font-size:28px}
+  .user-card .name{font-weight:800;font-size:19px;margin-top:12px}
+  .user-card .id{color:var(--muted2);font-size:13px;margin-top:3px}
+
+  .section{border:1px solid var(--line);border-radius:14px;background:#171718;margin-bottom:12px;overflow:hidden}
+  .section-head{display:flex;align-items:center;gap:10px;padding:15px 14px;cursor:pointer;user-select:none;-webkit-user-select:none}
+  .section-head::after{content:"";flex:none;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;margin-left:2px}
+  .section.open .section-head::after{transform:rotate(-135deg)}
+  .section-body{padding:2px 14px 16px}
+  .section-body[hidden]{display:none}
+  .section-num{flex:none;width:26px;height:26px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:800}
+  .section-head h3{margin:0;font-size:16px;flex:1}
+  .section-head span{font-size:12px;color:var(--muted2)}
+
+  /* Mục 1: Thống kê */
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .stat b{display:block;font-size:22px;line-height:1.1}
+  .stat span{display:block;margin-top:5px;font-size:12.5px;color:var(--muted);line-height:1.4}
+  .stat.wide{grid-column:1/-1}
+  .progress-row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin:12px 0 7px}
+  .track{height:8px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}
+  .track i{display:block;height:100%;width:0%;background:var(--green)}
+
+  /* Mục 2: Số dư */
+  .balance-card{background:var(--panel);border:1px solid rgba(34,192,122,.45);border-radius:14px;padding:18px}
+  .balance-card .label{font-size:13px;color:var(--muted)}
+  .balance-card .amount{font-size:34px;font-weight:800;line-height:1.1;margin-top:6px;color:#fff}
+  .balance-card .amount small{font-size:16px;color:var(--muted)}
+  .balance-rows{margin-top:14px;border-top:1px solid var(--line)}
+  .balance-rows div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .balance-rows div:last-child{border-bottom:0;padding-bottom:0}
+  .balance-rows span{color:var(--muted)}
+  .balance-rows b{white-space:nowrap}
+  .rate-note{font-size:12.5px;color:var(--muted2);line-height:1.55;margin:10px 0 0}
+
+  /* Mục 3: Rút tiền */
+  .field{margin-bottom:13px}
+  .field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+  .field input,.field select{width:100%;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 13px;color:#fff;outline:none;color-scheme:dark}
+  .field input:focus,.field select:focus{border-color:var(--cyan)}
+  .field .hint{font-size:12px;color:var(--muted2);margin-top:5px;line-height:1.5}
+  .form-msg{display:none;border-radius:10px;padding:11px 13px;font-size:13.5px;line-height:1.55;margin-bottom:13px}
+  .form-msg.show{display:block}
+  .form-msg.err{background:rgba(254,44,85,.1);border:1px solid rgba(254,44,85,.45);color:#ffb3c2}
+  .form-msg.ok{background:rgba(34,192,122,.1);border:1px solid rgba(34,192,122,.45);color:#a9eccd}
+  .history{margin-top:16px}
+  .history h4{margin:0 0 8px;font-size:14px}
+  .history-item{display:flex;justify-content:space-between;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:13px;margin-bottom:8px}
+  .history-item span{color:var(--muted);display:block;margin-top:2px;font-size:12px}
+  .empty-note{padding:18px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.6;background:var(--panel);border:1px dashed var(--line);border-radius:10px}
+  .notice{background:rgba(245,197,24,.09);border:1px solid rgba(245,197,24,.32);border-radius:10px;padding:11px 13px;font-size:12.5px;line-height:1.6;color:#f3e2a0;margin-top:14px}
+
+  /* Đăng nhập / Đăng ký */
+  .auth-view{position:absolute;inset:0;z-index:80;background:#0e0e0f;display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-width:none}
+  .auth-view::-webkit-scrollbar{display:none}
+  .auth-view[hidden]{display:none}
+  .auth-wrap{flex:1 0 auto;display:flex;flex-direction:column;justify-content:center;padding:28px 20px calc(24px + env(safe-area-inset-bottom,0px));max-width:420px;width:100%;margin:0 auto}
+  .auth-logo{width:96px;height:96px;margin-bottom:12px}
+  .auth-logo svg{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 16px rgba(0,0,0,.45))}
+  /* Ghi chú ngắn của Web — 1 dòng gọn, đẹp, ngay dưới logo ở màn hình đăng nhập / đăng ký */
+  .web-note{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;max-width:100%;background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.35);color:#f3e2a0;font-size:12.5px;font-weight:700;line-height:1.45;padding:8px 13px;border-radius:99px;margin:0 0 16px}
+  .web-note i{flex:none;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  /* Quy tắc sử dụng ngắn gọn trong mục Đăng ký */
+  .terms-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:13px}
+  .terms-title{font-size:13.5px;font-weight:800;color:#fff;display:flex;align-items:center;gap:8px}
+  .terms-title::before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+  .terms-list{margin:8px 0 0;padding-left:17px;color:var(--muted);font-size:12.5px;line-height:1.65}
+  .terms-list li{margin:1px 0}
+  .terms-check{position:relative;display:flex;align-items:flex-start;gap:10px;margin-top:11px;padding-top:11px;border-top:1px solid var(--line);cursor:pointer;font-size:13px;font-weight:700;line-height:1.45;color:#fff}
+  .terms-check input{position:absolute;top:11px;left:0;width:22px;height:22px;margin:0;opacity:0;cursor:pointer}
+  .terms-check .tick{flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid rgba(255,255,255,.4);background:var(--panel2);display:grid;place-items:center;color:transparent;transition:background .15s ease,border-color .15s ease,color .15s ease}
+  .terms-check .tick svg{width:13px;height:13px}
+  .terms-check input:checked ~ .tick{background:var(--gold);border-color:var(--gold);color:#111}
+  .terms-check input:focus-visible ~ .tick{outline:2px solid var(--cyan);outline-offset:2px}
+  .terms-box[hidden]{display:none}
+  .terms-box.flash{animation:termsFlash .5s ease}
+  @keyframes termsFlash{0%{border-color:var(--gold);box-shadow:0 0 0 3px rgba(245,197,24,.25)}100%{border-color:var(--line);box-shadow:none}}
+  /* Thông báo tạo tài khoản thành công */
+  .success-pop{position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.74);display:grid;place-items:center;padding:20px}
+  .success-pop[hidden]{display:none}
+  .success-card{background:#171718;border:1px solid rgba(34,192,122,.5);border-radius:16px;padding:26px 22px;text-align:center;max-width:320px;width:100%;animation:popIn .28s ease}
+  @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+  .success-card .ok-ring{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:rgba(34,192,122,.16);border:2px solid var(--green);display:grid;place-items:center;color:var(--green)}
+  .success-card .ok-ring svg{width:32px;height:32px}
+  .success-card h3{margin:0;font-size:19px}
+  .success-card p{margin:8px 0 0;font-size:13.5px;color:var(--muted);line-height:1.6}
+  .success-card p b{color:#fff}
+  .auth-wrap h1{margin:0;font-size:23px;line-height:1.25}
+  .auth-wrap .sub{margin:8px 0 20px;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .auth-tabs{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:4px;margin-bottom:18px}
+  .auth-tabs button{flex:1;padding:10px;border-radius:8px;font-weight:700;font-size:14px;color:var(--muted)}
+  .auth-tabs button.on{background:var(--accent);color:#fff}
+  .role-badge{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:99px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+  .role-badge.admin{background:rgba(245,197,24,.14);border-color:rgba(245,197,24,.5);color:var(--gold)}
+  .logout-btn{margin-top:14px}
+
+  /* Thiết bị & nhật ký */
+  .device-rows{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:6px 14px}
+  .device-rows div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .device-rows div:last-child{border-bottom:0}
+  .device-rows span{color:var(--muted);flex:none}
+  .device-rows b{text-align:right;word-break:break-word;font-weight:600}
+  .log-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:12.5px;margin-bottom:8px;line-height:1.55}
+  .log-item b{font-size:13px}
+  .log-item span{color:var(--muted);display:block;margin-top:2px;word-break:break-word}
+  .log-item .blocked{color:#ff8299;font-weight:700}
+  .log-item .allowed{color:var(--green);font-weight:700}
+
+  /* Admin — danh sách & chi tiết tài khoản */
+  .acct-row{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px;cursor:pointer}
+  .acct-row:active{transform:scale(.99)}
+  .acct-row .a-av{flex:none;width:38px;height:38px;border-radius:50%;background:var(--accent);display:grid;place-items:center;font-weight:800;font-size:15px}
+  .acct-row .a-main{flex:1;min-width:0}
+  .acct-row .a-main b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .acct-row .a-main span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+  .st-badge{flex:none;font-size:11px;font-weight:800;padding:4px 9px;border-radius:99px;white-space:nowrap}
+  .st-badge.on{background:rgba(34,192,122,.14);border:1px solid rgba(34,192,122,.5);color:#7fe6bb}
+  .st-badge.off{background:rgba(254,44,85,.13);border:1px solid rgba(254,44,85,.5);color:#ff9db1}
+  .st-badge.adm{background:rgba(245,197,24,.14);border:1px solid rgba(245,197,24,.5);color:var(--gold)}
+  .acct-view{position:absolute;inset:0;z-index:60;background:#0e0e0f;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none;touch-action:none}
+  .acct-view[hidden]{display:none}
+  .acct-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
+  .btn.danger{background:rgba(254,44,85,.14);border:1px solid rgba(254,44,85,.55);color:#ff9db1}
+  .btn.warn{background:rgba(245,197,24,.12);border:1px solid rgba(245,197,24,.5);color:var(--gold)}
+  .btn:disabled{opacity:.4}
+  .wd-actions{display:flex;gap:7px;flex:none}
+  .mini-btn{padding:7px 12px;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer}
+  .mini-btn.ok{background:rgba(34,192,122,.15);border:1px solid rgba(34,192,122,.5);color:#7fe6bb}
+  .mini-btn.no{background:rgba(254,44,85,.12);border:1px solid rgba(254,44,85,.5);color:#ff9db1}
+
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);background:#fff;color:#000;font-size:13.5px;font-weight:600;padding:11px 17px;border-radius:99px;z-index:100;opacity:0;pointer-events:none;transition:.25s;box-shadow:0 8px 28px rgba(0,0,0,.45);max-width:88vw;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .noti-item{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 13px;margin-bottom:8px}
+  .noti-item.unread{border-color:rgba(37,244,238,.5)}
+  .noti-item b{font-size:13.5px;display:block}
+  .noti-item p{margin:4px 0 0;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .noti-item time{font-size:11.5px;color:var(--muted2);display:block;margin-top:6px}
+  .noti-dot{display:inline-block;min-width:20px;height:20px;line-height:20px;text-align:center;border-radius:99px;background:var(--accent);color:#fff;font-size:11px;font-weight:800;padding:0 6px}
+  .checkin-box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+  .checkin-box .streak{font-size:28px;font-weight:800}
+  .checkin-days{display:flex;gap:6px;justify-content:center;margin:12px 0}
+  .checkin-days span{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+  .checkin-days span.done{background:rgba(34,192,122,.2);border-color:rgba(34,192,122,.6);color:#7fe6bb}
+  .checkin-days span.today{border-color:var(--gold);color:var(--gold)}
+  .wd-detail{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px;font-size:12.5px;line-height:1.7;width:100%}
+  .wd-detail b{color:#fff}
+  .qr-box{margin-top:12px;background:#fff;border-radius:12px;padding:14px;text-align:center;color:#111}
+  .qr-box .qr-holder{display:flex;justify-content:center;margin:8px 0}
+  .qr-box .qr-holder img,.qr-box .qr-holder canvas{width:200px;height:200px;max-width:100%}
+  .qr-box .qr-bank{display:inline-block;background:#e8f5ee;border:1px solid #22c07a;color:#0b6b3a;font-weight:800;font-size:11px;padding:3px 9px;border-radius:99px;letter-spacing:.04em}
+  .qr-box p{margin:3px 0;font-size:12.5px;line-height:1.5;word-break:break-word}
+  .qr-note{font-weight:800;letter-spacing:.03em}
+
+  /* ===== Mưa xu $ — nhẹ, gọn ===== */
+  .fx-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+  .fx-coin{position:absolute;top:-48px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff7ae,#f5c518 55%,#eab308 78%,#b45309);border:1.5px solid #92400e;color:#7c2d12;display:grid;place-items:center;font-weight:900;line-height:1;box-shadow:0 4px 10px rgba(0,0,0,.35);animation:coinFall linear infinite;will-change:transform;opacity:.92}
+  @keyframes coinFall{0%{transform:translate3d(0,-12px,0) rotate(0deg)}50%{transform:translate3d(var(--drift,12px),56vh,0) rotate(180deg)}100%{transform:translate3d(calc(var(--drift,12px) * -0.5),112vh,0) rotate(360deg)}}
+  @keyframes coinFallSlot{0%{transform:translate3d(0,-12px,0) rotate(0deg)}50%{transform:translate3d(var(--drift,10px),290px,0) rotate(180deg)}100%{transform:translate3d(calc(var(--drift,10px) * -0.5),580px,0) rotate(360deg)}}
+  .ad-slot .fx-coin{animation-name:coinFallSlot}
+  .auth-wrap{position:relative;z-index:2}
+  /* Khi đang ở màn hình đăng nhập / đăng ký: ẩn sạch thanh trên và luồng phía sau */
+  .app:has(> .auth-view:not([hidden])) .topbar{display:none}
+  .app:has(> .auth-view:not([hidden])) .feed{display:none}
+  .ad-slot{position:relative;overflow:hidden}
+  .ad-slot>*{position:relative;z-index:1}
+  .ad-slot>.fx-layer{position:absolute;z-index:0}
+  /* ===== Tối ưu gọn + mượt toàn web ===== */
+  .feed,.pv-scroll,.auth-view{scrollbar-width:none}
+  button,.btn,.mini-btn,.acct-row{transition:transform .15s ease,opacity .15s ease}
+  .section-head::after{transition:transform .18s ease}
+  input,select{transition:border-color .15s ease}
+  @media (prefers-reduced-motion:reduce){.fx-coin{animation:none}.success-card{animation:none}.terms-box.flash{animation:none}*,*::before,*::after{transition-duration:.01ms!important}}
+
+  /* ===== BẢN NÂNG CẤP LỚN — HUD, cấp độ, biểu đồ, tổng quan Admin ===== */
+  .hud{pointer-events:auto;margin-right:auto;display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 14px 0 9px;border-radius:99px;background:rgba(20,20,22,.86);border:1.5px solid rgba(245,197,24,.55);box-shadow:0 4px 16px rgba(0,0,0,.45);color:#fff;max-width:46vw;overflow:hidden}
+  .hud .coin-ic{width:25px;height:25px;flex:none;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fff7ae,#f5c518 55%,#eab308 80%,#b45309);border:1.5px solid #92400e;display:grid;place-items:center;color:#7c2d12;font-size:12px;font-weight:900}
+  .hud b{font-size:14.5px;white-space:nowrap}
+  .hud span{font-size:11.5px;color:var(--muted);white-space:nowrap}
+  .hud.pulse{animation:hudPulse .55s ease}
+  @keyframes hudPulse{0%{transform:scale(1)}35%{transform:scale(1.08);border-color:var(--gold)}100%{transform:scale(1)}}
+  .level-badge{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:99px;background:rgba(245,197,24,.13);border:1px solid rgba(245,197,24,.5);color:var(--gold)}
+  .daily-chart{display:flex;align-items:flex-end;gap:8px;padding:14px 12px 8px;background:var(--panel);border:1px solid var(--line);border-radius:12px}
+  .dc-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
+  .dc-bar{width:100%;max-width:30px;border-radius:6px 6px 3px 3px;background:linear-gradient(180deg,var(--gold),#d97706);min-height:4px}
+  .dc-col.today .dc-bar{background:linear-gradient(180deg,#ff5c7a,var(--accent))}
+  .dc-val{font-size:11px;font-weight:800;line-height:1}
+  .dc-lab{font-size:10.5px;color:var(--muted2);white-space:nowrap}
+  .admin-ov{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+  .slide{background:radial-gradient(120% 55% at 50% 0%,rgba(245,197,24,.07),transparent 60%),linear-gradient(180deg,#17171a,#0a0a0b);contain:layout style}
+  .ad-slot{box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 30px rgba(0,0,0,.35)}
+  .ad-ph-icon{animation:phPulse 2.2s ease-in-out infinite}
+  @keyframes phPulse{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.09);opacity:1}}
+  .profile-btn{background:linear-gradient(145deg,#ff4d6d,var(--accent))}
+  @media(max-width:430px){.hud{max-width:36vw;padding-right:11px}.hud span{display:none}}
+  @media (prefers-reduced-motion:reduce){.hud.pulse,.ad-ph-icon{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Giao diện chính: nút Điểm danh + nút Thông báo ngay cạnh nút Trang cá nhân -->
+  <div class="topbar">
+    <div class="hud" id="hudPill" title="Số dư hiện tại của bạn">
+      <span class="coin-ic" aria-hidden="true">$</span>
+      <b id="hudBalance">0 xu</b>
+      <span id="hudWatched">· 0 đã xem</span>
+    </div>
+    <button class="checkin-btn" id="checkinTopBtn" type="button" hidden aria-label="Điểm danh hôm nay" title="Điểm danh hôm nay · +0,5 xu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
+      <span>Điểm danh</span><b>+0,5 xu</b>
+    </button>
+    <button class="noti-btn" id="openNotiTop" type="button" aria-label="Mở thông báo" title="Thông báo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 20a2 2 0 0 1-3.4 0"/></svg>
+      <span class="noti-count" id="notiBadgeTop" hidden>0</span>
+    </button>
+    <button class="profile-btn" id="openProfile" type="button" aria-label="Mở trang cá nhân" title="Trang cá nhân">B</button>
+  </div>
+
+  <!-- Luồng chỉ có quảng cáo -->
+  <main class="feed" id="feed" aria-label="Luồng quảng cáo"></main>
+
+  <!-- ============ ĐĂNG NHẬP / ĐĂNG KÝ ============ -->
+  <section class="auth-view" id="authView" aria-label="Đăng nhập và đăng ký">
+    <div class="fx-layer" aria-hidden="true">
+      <span class="fx-coin" style="left:6%;width:30px;height:30px;font-size:15px;--drift:16px;animation-duration:7.5s;animation-delay:0s">$</span>
+      <span class="fx-coin" style="left:16%;width:22px;height:22px;font-size:11px;--drift:-12px;animation-duration:9s;animation-delay:1.2s">$</span>
+      <span class="fx-coin" style="left:29%;width:36px;height:36px;font-size:18px;--drift:20px;animation-duration:8.2s;animation-delay:2.4s">$</span>
+      <span class="fx-coin" style="left:44%;width:24px;height:24px;font-size:12px;--drift:-18px;animation-duration:7s;animation-delay:.6s">$</span>
+      <span class="fx-coin" style="left:58%;width:32px;height:32px;font-size:16px;--drift:14px;animation-duration:9.4s;animation-delay:3s">$</span>
+      <span class="fx-coin" style="left:71%;width:21px;height:21px;font-size:11px;--drift:-10px;animation-duration:6.8s;animation-delay:1.8s">$</span>
+      <span class="fx-coin" style="left:83%;width:34px;height:34px;font-size:17px;--drift:18px;animation-duration:8.8s;animation-delay:.3s">$</span>
+      <span class="fx-coin" style="left:93%;width:25px;height:25px;font-size:12px;--drift:-14px;animation-duration:7.8s;animation-delay:2s">$</span>
+      <span class="fx-coin" style="left:37%;width:19px;height:19px;font-size:10px;--drift:10px;animation-duration:6.4s;animation-delay:4s">$</span>
+      <span class="fx-coin" style="left:66%;width:19px;height:19px;font-size:10px;--drift:-8px;animation-duration:6.2s;animation-delay:4.6s">$</span>
+    </div>
+    <div class="auth-wrap">
+      <div class="auth-logo" role="img" aria-label="Logo mèo cầm đồng xu">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <!-- Tai mèo -->
+          <path d="M30 40 L23 13 L50 25 Z" fill="#f6a609"/>
+          <path d="M90 40 L97 13 L70 25 Z" fill="#f6a609"/>
+          <path d="M32 34 L28 20 L43 27 Z" fill="#ffb3c2"/>
+          <path d="M88 34 L92 20 L77 27 Z" fill="#ffb3c2"/>
+          <!-- Thân mèo -->
+          <path d="M33 120 C33 93 45 82 60 82 C75 82 87 93 87 120 Z" fill="#f6a609"/>
+          <!-- Đầu mèo -->
+          <circle cx="60" cy="52" r="35" fill="#f6a609"/>
+          <ellipse cx="60" cy="62" rx="17" ry="12" fill="#ffe1a8"/>
+          <!-- Vằn trán -->
+          <path d="M52 20 v8 M60 18 v9 M68 20 v8" stroke="#d97706" stroke-width="3.5" stroke-linecap="round"/>
+          <!-- Mắt -->
+          <circle cx="46" cy="50" r="4.4" fill="#26231f"/>
+          <circle cx="74" cy="50" r="4.4" fill="#26231f"/>
+          <circle cx="47.6" cy="48.4" r="1.5" fill="#fff"/>
+          <circle cx="75.6" cy="48.4" r="1.5" fill="#fff"/>
+          <!-- Mũi + miệng -->
+          <path d="M56.5 59 h7 l-3.5 4.4 z" fill="#fe2c55"/>
+          <path d="M60 63.5 q-1.5 4.5 -6.5 3.5 M60 63.5 q1.5 4.5 6.5 3.5" fill="none" stroke="#26231f" stroke-width="2" stroke-linecap="round"/>
+          <!-- Má hồng -->
+          <circle cx="36" cy="60" r="4.5" fill="#ffb3c2" opacity=".75"/>
+          <circle cx="84" cy="60" r="4.5" fill="#ffb3c2" opacity=".75"/>
+          <!-- Râu -->
+          <path d="M14 54 l16 2 M15 64 l15 -1.5 M106 54 l-16 2 M105 64 l-15 -1.5" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+          <!-- Đồng xu vàng mèo đang cầm -->
+          <g>
+            <circle cx="60" cy="100" r="15" fill="#f5c518" stroke="#b45309" stroke-width="2"/>
+            <circle cx="60" cy="100" r="10.5" fill="none" stroke="#b45309" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <text x="60" y="104.5" text-anchor="middle" font-size="9" font-weight="800" fill="#7c2d12">xu</text>
+          </g>
+          <!-- Hai chân trước cầm đồng xu -->
+          <ellipse cx="50" cy="111" rx="6.5" ry="5.5" fill="#f6a609" stroke="#d97706" stroke-width="1.6" transform="rotate(-24 50 111)"/>
+          <ellipse cx="70" cy="111" rx="6.5" ry="5.5" fill="#f6a609" stroke="#d97706" stroke-width="1.6" transform="rotate(24 70 111)"/>
+        </svg>
+      </div>
+      <p class="web-note"><i aria-hidden="true"></i>Xem quảng cáo · Nhận xu · Rút MoMo / ZaloPay</p>
+      <div class="auth-tabs" role="tablist">
+        <button type="button" id="tabLogin" class="on">Đăng nhập</button>
+        <button type="button" id="tabRegister">Đăng ký</button>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-msg" id="loginMsg" role="status"></div>
+        <div class="field">
+          <label for="liUser">Username</label>
+          <input id="liUser" type="text" placeholder="Nhập username" autocomplete="username" spellcheck="false"/>
+        </div>
+        <div class="field">
+          <label for="liPass">Mật khẩu</label>
+          <input id="liPass" type="password" placeholder="Nhập mật khẩu" autocomplete="current-password"/>
+        </div>
+        <button class="btn primary block" type="submit">Đăng nhập</button>
+        <button class="btn ghost block" type="button" id="forgotBtn" style="margin-top:10px">Quên mật khẩu?</button>
+      </form>
+
+      <form id="resetForm" novalidate hidden>
+        <div class="form-msg" id="resetMsg" role="status"></div>
+        <div class="field">
+          <label for="rpUser">Username</label>
+          <input id="rpUser" type="text" placeholder="Nhập username của bạn" autocomplete="username" spellcheck="false"/>
+        </div>
+        <div class="field">
+          <label for="rpPass">Mật khẩu mới</label>
+          <input id="rpPass" type="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"/>
+        </div>
+        <div class="field">
+          <label for="rpPass2">Nhập lại mật khẩu mới</label>
+          <input id="rpPass2" type="password" placeholder="Nhập lại mật khẩu mới" autocomplete="new-password"/>
+        </div>
+        <button class="btn primary block" type="submit">Đặt lại mật khẩu</button>
+        <button class="btn ghost block" type="button" id="resetBack" style="margin-top:10px">Quay lại đăng nhập</button>
+      </form>
+
+      <form id="forcePassForm" novalidate hidden>
+        <div class="form-msg" id="forceMsg" role="status"></div>
+        <div class="field">
+          <label for="fpUser">Username</label>
+          <input id="fpUser" type="text" readonly autocomplete="username"/>
+        </div>
+        <div class="field">
+          <label for="fpPass">Mật khẩu mới</label>
+          <input id="fpPass" type="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"/>
+        </div>
+        <div class="field">
+          <label for="fpPass2">Nhập lại mật khẩu mới</label>
+          <input id="fpPass2" type="password" placeholder="Nhập lại mật khẩu mới" autocomplete="new-password"/>
+        </div>
+        <button class="btn primary block" type="submit">Đặt mật khẩu mới &amp; đăng nhập</button>
+        <button class="btn ghost block" type="button" id="forceBack" style="margin-top:10px">Quay lại đăng nhập</button>
+      </form>
+
+      <form id="registerForm" novalidate hidden>
+        <div class="form-msg" id="registerMsg" role="status"></div>
+        <div class="field">
+          <label for="rgUser">Username</label>
+          <input id="rgUser" type="text" placeholder="4–20 ký tự: chữ, số, dấu _" autocomplete="username" spellcheck="false"/>
+        </div>
+        <div class="field">
+          <label for="rgPass">Mật khẩu</label>
+          <input id="rgPass" type="password" placeholder="Ít nhất 6 ký tự" autocomplete="new-password"/>
+        </div>
+        <div class="field">
+          <label for="rgPass2">Nhập lại mật khẩu</label>
+          <input id="rgPass2" type="password" placeholder="Nhập lại mật khẩu" autocomplete="new-password"/>
+        </div>
+        <div class="terms-box" id="rgTerms" hidden>
+          <div class="terms-title">Quy tắc sử dụng</div>
+          <ul class="terms-list">
+            <li>Mỗi thiết bị chỉ sử dụng 1 tài khoản; không chia sẻ tài khoản cho người khác.</li>
+            <li>Không gian lận, không dùng công cụ tự động hay thao tác bất thường.</li>
+            <li>Bảo mật thông tin đăng nhập; không mạo danh người khác.</li>
+            <li>Tài khoản vi phạm quy tắc có thể bị khóa mà không cần báo trước.</li>
+          </ul>
+          <label class="terms-check" for="rgAgree">
+            <input type="checkbox" id="rgAgree"/>
+            <span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <span>Tôi đã đọc và đồng ý với Quy tắc sử dụng</span>
+          </label>
+        </div>
+        <button class="btn primary block" type="submit" id="rgSubmit">Đăng ký tài khoản</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ TRANG CÁ NHÂN ============ -->
+  <section class="profile-view" id="profileView" hidden aria-label="Trang cá nhân">
+    <div class="pv-head">
+      <button class="back-btn" id="closeProfile" type="button" aria-label="Quay lại xem quảng cáo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <h2>Trang cá nhân</h2>
+      <span class="spacer"></span>
+    </div>
+
+    <div class="pv-scroll">
+      <div class="user-card">
+        <div class="avatar" id="ucAvatar">?</div>
+        <div class="name" id="ucName">@…</div>
+        <div class="id" id="ucId">ID: —</div>
+        <span class="role-badge" id="ucRole">Người xem</span>
+        <span class="level-badge" id="ucLevel">Cấp 1 · Mới bắt đầu</span>
+        <button class="btn ghost logout-btn" id="logoutBtn" type="button">Đăng xuất</button>
+      </div>
+
+      <!-- MỤC 1: THỐNG KÊ ĐÃ XEM -->
+      <div class="section" aria-labelledby="h-stats">
+        <div class="section-head"><span class="section-num">1</span><h3 id="h-stats">Thống kê đã xem</h3></div>
+        <div class="section-body" hidden>
+        <div class="stat-grid">
+          <div class="stat"><b id="stWatched">0</b><span>Quảng cáo đã xem</span></div>
+          <div class="stat"><b id="stValid">0</b><span>Lượt xem hợp lệ</span></div>
+          <div class="stat"><b id="stFull">0</b><span>Xem hết quảng cáo</span></div>
+          <div class="stat"><b id="stPartial">0</b><span>Quảng cáo đã bỏ qua</span></div>
+          <div class="stat"><b id="stEarned">0 xu</b><span>Xu đã tích lũy</span></div>
+          <div class="stat"><b id="stLastReward">—</b><span>Xu nhận gần nhất</span></div>
+          <div class="stat"><b id="stToday">0</b><span>Lượt xem hôm nay</span></div>
+          <div class="stat"><b id="stTime">0 giây</b><span>Tổng thời gian đã xem</span></div>
+          <div class="stat wide">
+            <div class="progress-row" style="margin-top:0"><span>Tiến độ tới mức rút tối thiểu 2.000 xu</span><b id="stProgressText" style="color:#fff">0%</b></div>
+            <div class="track"><i id="stProgressBar"></i></div>
+          </div>
+          <div class="stat wide">
+            <div class="progress-row" style="margin-top:0"><span id="lvText">Cấp 1 · Mới bắt đầu</span><b id="lvNext" style="color:#fff"></b></div>
+            <div class="track"><i id="lvBar" style="background:var(--gold)"></i></div>
+          </div>
+        </div>
+        <div class="history">
+          <h4>Hoạt động 7 ngày gần đây</h4>
+          <div id="dailyChart"></div>
+          <p class="rate-note" id="dailyNote"></p>
+        </div>
+        <div class="history">
+          <h4>Lịch sử nhận xu gần đây</h4>
+          <div id="rewardHistory"><div class="empty-note">Chưa nhận xu lần nào.</div></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- MỤC 2: SỐ DƯ -->
+      <div class="section" aria-labelledby="h-balance">
+        <div class="section-head"><span class="section-num">2</span><h3 id="h-balance">Số dư</h3></div>
+        <div class="section-body" hidden>
+        <div class="balance-card">
+          <div class="label">Số dư khả dụng</div>
+          <div class="amount"><span id="balAvailable">0</span> <small>xu</small></div>
+          <div class="balance-rows">
+            <div><span>Tổng xu đã tích lũy</span><b id="balEarned">0 xu</b></div>
+            <div><span>Đã yêu cầu rút</span><b id="balRequested">0 xu</b></div>
+            <div><span>Mức rút tối thiểu</span><b>2.000 xu</b></div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- MỤC 3: RÚT XU -->
+      <div class="section" aria-labelledby="h-withdraw">
+        <div class="section-head"><span class="section-num">3</span><h3 id="h-withdraw">Rút xu</h3><span>Tối thiểu 2.000 xu</span></div>
+        <div class="section-body" hidden>
+        <div class="form-msg" id="withdrawMsg" role="status"></div>
+        <form id="withdrawForm" novalidate>
+          <div class="field">
+            <label for="wdMethod">Phương thức nhận — chỉ hỗ trợ ví điện tử</label>
+            <select id="wdMethod">
+              <option value="Ví MoMo">Ví MoMo</option>
+              <option value="Ví ZaloPay">Ví ZaloPay</option>
+            </select>
+            <div class="hint">Chỉ rút về <b>ví MoMo</b> hoặc <b>ví ZaloPay</b>. Không hỗ trợ chuyển khoản ngân hàng.</div>
+          </div>
+          <div class="field">
+            <label for="wdName">Họ tên chủ ví</label>
+            <input id="wdName" type="text" placeholder="Ví dụ: NGUYEN VAN A" autocomplete="name"/>
+          </div>
+          <div class="field">
+            <label for="wdAccount">Số điện thoại ví MoMo / ZaloPay</label>
+            <input id="wdAccount" type="text" inputmode="numeric" placeholder="Nhập số điện thoại đăng ký ví (10 số, bắt đầu bằng 0)" autocomplete="off"/>
+          </div>
+          <div class="field">
+            <label for="wdAmount">Số xu muốn rút</label>
+            <input id="wdAmount" type="number" min="2000" step="1" placeholder="Tối thiểu 2.000 xu" inputmode="numeric"/>
+            <div class="hint">Đơn vị là <b>xu</b>. Khi tạo lệnh rút, hệ thống tự tạo mã <b>QR thông tin ví</b> gồm loại ví (MoMo/ZaloPay), số điện thoại ví, họ tên, số tiền và ghi chú ngẫu nhiên để gửi Admin duyệt — Admin duyệt xong sẽ mở ví MoMo/ZaloPay và chuyển tiền theo thông tin trong QR.</div>
+          </div>
+          <button class="btn primary block" type="submit">Tạo lệnh rút xu</button>
+        </form>
+
+        <div class="history">
+          <h4>Lịch sử rút xu</h4>
+          <div id="withdrawHistory"><div class="empty-note">Chưa có yêu cầu rút xu nào.</div></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- MỤC 4: THIẾT BỊ & BẢO MẬT -->
+      <div class="section" aria-labelledby="h-device">
+        <div class="section-head"><span class="section-num">4</span><h3 id="h-device">Thiết bị &amp; bảo mật</h3></div>
+        <div class="section-body" hidden>
+        <div class="device-rows" id="deviceRows"></div>
+        <div class="history">
+          <h4>Lịch sử đăng nhập trên thiết bị</h4>
+          <div id="myLogList"><div class="empty-note">Chưa có lịch sử đăng nhập nào.</div></div>
+        </div>
+        </div>
+      </div>
+
+      <!-- MỤC 5: CHỈ ADMIN (username nongquocthien) — người xem thường không thấy mục này -->
+      <div class="section" id="adminSection" hidden aria-labelledby="h-adsense">
+        <div class="section-head"><span class="section-num">5</span><h3 id="h-adsense">Khu vực Admin</h3></div>
+        <div class="section-body" hidden>
+        <div class="admin-ov">
+          <div class="stat"><b id="admOvUsers">0</b><span>Tổng tài khoản</span></div>
+          <div class="stat"><b id="admOvViews">0</b><span>Lượt xem hợp lệ toàn hệ thống</span></div>
+          <div class="stat"><b id="admOvWd">0</b><span>Lệnh rút xu chờ duyệt</span></div>
+          <div class="stat"><b id="admOvFg">0</b><span>Yêu cầu quên mật khẩu chờ duyệt</span></div>
+        </div>
+        <div class="form-msg" id="adsenseMsg" role="status"></div>
+        <form id="adsenseForm" novalidate>
+          <div class="field">
+            <label for="pubId">Kết nối AdSense — Publisher ID của Admin</label>
+            <input id="pubId" type="text" placeholder="ca-pub-1234567890123456" autocomplete="off" spellcheck="false"/>
+          </div>
+          <button class="btn ghost block" type="submit">Kích hoạt AdSense</button>
+        </form>
+        <div class="balance-card" style="margin-top:12px">
+          <div class="label">Thưởng xu</div>
+          <div class="balance-rows">
+            <div><span>Tổng lượt đã ghi nhận</span><b id="admTotalViews">0</b></div>
+            <div><span>Lượt xem hết (hợp lệ)</span><b id="admFullViews">0</b></div>
+            <div><span>Lượt xem nửa chừng</span><b id="admPartialViews">0</b></div>
+            <div><span>Tổng xu đã phát cho người dùng</span><b id="admTotalCoins">0 xu</b></div>
+            <div><span>Xu từ xem hết quảng cáo</span><b id="admCoinsFull">0 xu</b></div>
+            <div><span>Xu từ xem nửa chừng</span><b id="admCoinsPartial">0 xu</b></div>
+            <div><span>Lượt trúng mức cao (0,5 – 1 xu)</span><b id="admHighWins">0 lượt</b></div>
+          </div>
+        </div>
+        <div class="balance-card" style="margin-top:12px">
+          <div class="label">Chia doanh thu cho người xem</div>
+          <div class="field" style="margin-top:12px">
+            <label for="rsPerView">Google trả cho 1 lượt xem hết (USD)</label>
+            <input id="rsPerView" type="number" min="0" step="0.01" inputmode="decimal"/>
+          </div>
+          <div class="field">
+            <label for="rsAdminPct">Admin giữ lại (%)</label>
+            <input id="rsAdminPct" type="number" min="0" max="100" step="1" inputmode="numeric"/>
+          </div>
+          <div class="field">
+            <label for="rsRate">Tỷ giá 1 USD (đ)</label>
+            <input id="rsRate" type="number" min="0" step="100" inputmode="numeric"/>
+          </div>
+          <div class="balance-rows">
+            <div><span>Tổng doanh thu Google (ước tính)</span><b id="rsGoogleTotal">$0,00</b></div>
+            <div><span>Admin giữ lại</span><b id="rsAdminKeep">$0,00</b></div>
+            <div><span>Quỹ chia cho người xem</span><b id="rsPool">$0,00</b></div>
+          </div>
+          <div class="history">
+            <h4>Chi tiết từng người xem</h4>
+            <div id="rsTable"><div class="empty-note">Chưa có người xem nào.</div></div>
+          </div>
+        </div>
+        <div class="history">
+          <h4>Quản lý tài khoản</h4>
+          <div class="field">
+            <input id="admSearch" type="text" placeholder="Tìm tài khoản theo username hoặc ID…" autocomplete="off" spellcheck="false"/>
+          </div>
+          <div id="adminAcctList"><div class="empty-note">Chưa có tài khoản nào.</div></div>
+        </div>
+        <div class="history">
+          <h4>Thông báo quên mật khẩu</h4>
+          <div id="adminForgotList"><div class="empty-note">Chưa có yêu cầu quên mật khẩu nào.</div></div>
+        </div>
+        <div class="history">
+          <h4>Yêu cầu rút xu</h4>
+          <div id="adminWdList"><div class="empty-note">Chưa có yêu cầu rút xu nào.</div></div>
+        </div>
+        <div class="history">
+          <h4>Nhật ký thiết bị</h4>
+          <div id="adminLogList"><div class="empty-note">Chưa có nhật ký nào.</div></div>
+        </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ THÔNG BÁO — màn hình RIÊNG BIỆT, không nằm trong Trang cá nhân ============ -->
+  <section class="profile-view" id="notiView" hidden aria-label="Thông báo">
+    <div class="pv-head">
+      <button class="back-btn" id="closeNoti" type="button" aria-label="Quay lại xem quảng cáo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <h2>Thông báo</h2>
+      <span class="spacer"></span>
+    </div>
+    <div class="pv-scroll">
+      <div id="notiList"><div class="empty-note">Chưa có thông báo nào.</div></div>
+      <button class="btn ghost block" type="button" id="notiReadAll" style="margin-top:10px">Đánh dấu đã đọc tất cả</button>
+    </div>
+  </section>
+
+  <!-- ============ ĐIỂM DANH — màn hình RIÊNG BIỆT, không nằm trong Trang cá nhân ============ -->
+  <section class="profile-view" id="checkinView" hidden aria-label="Điểm danh hàng ngày">
+    <div class="pv-head">
+      <button class="back-btn" id="closeCheckin" type="button" aria-label="Quay lại xem quảng cáo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <h2>Điểm danh hàng ngày</h2>
+      <span class="spacer"></span>
+    </div>
+    <div class="pv-scroll">
+      <div class="checkin-box">
+        <div style="font-size:13px;color:var(--gold);font-weight:700" id="checkinHeadStat">—</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:10px">Chuỗi điểm danh</div>
+        <div class="streak"><span id="ciStreak">0</span> ngày</div>
+        <div class="checkin-days" id="ciDays"></div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6" id="ciInfo">Điểm danh mỗi ngày nhận <b style="color:#fff">0,5 xu</b>. Điểm danh liên tục để giữ chuỗi.</div>
+        <button class="btn primary block" type="button" id="ciBtn" style="margin-top:12px">Điểm danh hôm nay · +0,5 xu</button>
+        <div style="font-size:12.5px;color:var(--muted2);margin-top:10px" id="ciTotal">Tổng lượt điểm danh: 0 · Xu điểm danh đã nhận: 0 xu</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CHI TIẾT TÀI KHOẢN (CHỈ ADMIN) ============ -->
+  <section class="acct-view" id="acctView" hidden aria-label="Chi tiết tài khoản">
+    <div class="pv-head">
+      <button class="back-btn" id="closeAcct" type="button" aria-label="Quay lại danh sách tài khoản">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <h2>Chi tiết tài khoản</h2>
+      <span class="spacer"></span>
+    </div>
+    <div class="pv-scroll" id="acctDetail"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<!-- Thông báo tạo tài khoản thành công: hiện sau khi tích xác nhận điều khoản, rồi tự vào trong -->
+<div class="success-pop" id="regSuccess" hidden role="status" aria-live="polite">
+  <div class="success-card">
+    <div class="ok-ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>
+    <h3>Tạo tài khoản thành công!</h3>
+    <p>Tài khoản <b id="regSuccessUser">@…</b> · ID <b id="regSuccessId">—</b><br/>Đã lưu vào hệ thống. Đang vào trang xem quảng cáo…</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  /* ---------- Thưởng XU theo từng quảng cáo (mỗi người dùng, mỗi quảng cáo tính riêng) ----------
+     - Xem hết 1 quảng cáo: cộng ngẫu nhiên 0,02 – 1 xu.
+       Trong đó chỉ ~10% lượt xem hết trúng mức CAO (0,5 – 1 xu) — 100 lượt thì ~10 lượt được cao,
+       90% còn lại nhận mức thường 0,02 – 0,10 xu.
+     - Xem nửa chừng / bỏ qua: cộng 0,001 xu.
+     Đơn vị thưởng gọi là "xu". */
+  var COIN_PARTIAL = 0.001;            // xem nửa chừng: 0,001 xu
+  var HIGH_CHANCE = 0.10;              // tỉ lệ trúng mức cao khi xem hết: 10%
+  function rewardFull(){
+    if(Math.random() < HIGH_CHANCE) return Math.round((0.5 + Math.random() * 0.5) * 1000) / 1000;  // mức cao: 0,5 – 1 xu
+    return Math.round((0.02 + Math.random() * 0.08) * 1000) / 1000;                               // mức thường: 0,02 – 0,10 xu
+  }
+  var MIN_WITHDRAW = 2000;             // mức rút tối thiểu: 2.000 xu (đơn vị xu, không gọi là VND)
+  var CHECKIN_REWARD = 0.5;            // điểm danh hàng ngày: +0,5 xu
+  /* Cài đặt chia doanh thu (chỉ Admin sửa được) — tự động tính lại khi thay đổi */
+  var revSettings = { perViewUSD: 1, adminPct: 89, usdVnd: 25000 };
+  function fmtUSD2(n){ return "$" + (Math.round(n * 100) / 100).toLocaleString("vi-VN", { minimumFractionDigits:2, maximumFractionDigits:2 }); }
+  var VIEW_SECONDS = 5;
+  var BATCH_ADS = 6;       // mỗi lần cuộn gần cuối nạp thêm 6 quảng cáo — cuộn vô hạn, không giới hạn số quảng cáo
+  var adCounter = 0;
+
+  var state = { watched:{}, watchedCount:0, fullCount:0, partialCount:0, watchSeconds:0, requested:0, requests:[], coins:0, coinsFull:0, coinsPartial:0, highWins:0, lastReward:0, rewardLog:[], daily:{} };
+
+  function fmt(n){ return n.toLocaleString("vi-VN"); }
+  function fmtMoney(n){
+    var r = Math.round(n * 100) / 100;
+    if(Math.abs(r - Math.round(r)) < 0.001) return fmt(Math.round(r));
+    return r.toLocaleString("vi-VN", { minimumFractionDigits:2, maximumFractionDigits:2 });
+  }
+  function fmtUSDflex(n){
+    if(n > 0 && n < 0.01) return "$" + n.toFixed(5);
+    if(n > 0 && n < 1 && Math.abs(n * 100 - Math.round(n * 100)) > 0.001) return "$" + n.toFixed(5).replace(/0+$/,"").replace(/\.$/,".00");
+    return "$" + n.toFixed(2);
+  }
+  function fmtCoin(n){
+    var r = Math.round((n || 0) * 1000) / 1000;
+    return r.toLocaleString("vi-VN", { minimumFractionDigits:0, maximumFractionDigits:3 });
+  }
+  /* ===== NÂNG CẤP LỚN: cấp độ người xem, hoạt động theo ngày, lịch sử nhận xu, tổng quan Admin ===== */
+  var LEVELS = [
+    { n:1, name:"Mới bắt đầu", need:0 },
+    { n:2, name:"Người xem chăm chỉ", need:10 },
+    { n:3, name:"Thợ săn xu", need:50 },
+    { n:4, name:"Chuyên gia quảng cáo", need:150 },
+    { n:5, name:"Bậc thầy xu", need:400 },
+    { n:6, name:"Huyền thoại", need:1000 }
+  ];
+  function levelOf(full){
+    var cur = LEVELS[0], next = null;
+    for(var li=0; li<LEVELS.length; li++){ if(full >= LEVELS[li].need){ cur = LEVELS[li]; next = LEVELS[li+1] || null; } }
+    var pct = 100;
+    if(next) pct = Math.min(100, Math.round((full - cur.need) / (next.need - cur.need) * 100));
+    return { cur:cur, next:next, pct:pct };
+  }
+  function trackDaily(kind, amount){
+    if(!state.daily) state.daily = {};
+    var k = todayKey();
+    var rec = state.daily[k] || (state.daily[k] = { full:0, partial:0, checkin:0, coins:0 });
+    if(kind === "full") rec.full++; else if(kind === "partial") rec.partial++; else if(kind === "checkin") rec.checkin++;
+    rec.coins = Math.round(((rec.coins || 0) + (amount || 0)) * 1000) / 1000;
+    if(currentUser) currentUser.daily = state.daily;
+    /* Dọn dữ liệu ngày cũ, chỉ giữ 30 ngày gần nhất */
+    var keys = Object.keys(state.daily).sort();
+    while(keys.length > 30){ delete state.daily[keys.shift()]; }
+  }
+  function logReward(type, amount){
+    if(!state.rewardLog) state.rewardLog = [];
+    state.rewardLog.unshift({ t: Date.now(), type:type, amount:amount });
+    if(state.rewardLog.length > 30) state.rewardLog.length = 30;
+    if(currentUser) currentUser.rewardLog = state.rewardLog;
+  }
+  function pulseHud(){
+    var h = document.getElementById("hudPill");
+    if(!h) return;
+    h.classList.remove("pulse"); void h.offsetWidth; h.classList.add("pulse");
+  }
+  function renderLevel(){
+    var full = state.fullCount || 0;
+    var lv = levelOf(full);
+    var badge = document.getElementById("ucLevel");
+    if(badge) badge.textContent = "Cấp " + lv.cur.n + " · " + lv.cur.name;
+    var lt = document.getElementById("lvText");
+    if(lt) lt.textContent = "Cấp " + lv.cur.n + " · " + lv.cur.name + " — đã xem hết " + fmt(full) + " quảng cáo";
+    var ln = document.getElementById("lvNext");
+    if(ln) ln.textContent = lv.next ? ("Còn " + fmt(lv.next.need - full) + " lượt tới Cấp " + lv.next.n) : "Cấp cao nhất";
+    var lb = document.getElementById("lvBar");
+    if(lb) lb.style.width = lv.pct + "%";
+  }
+  function renderDailyChart(){
+    var box = document.getElementById("dailyChart");
+    if(!box) return;
+    var labels = ["CN","T2","T3","T4","T5","T6","T7"];
+    var days = [], max = 0, totalCoins = 0;
+    for(var i=6; i>=0; i--){
+      var d = new Date(); d.setDate(d.getDate() - i);
+      var rec = (state.daily && state.daily[todayKey(d)]) || { full:0, partial:0, checkin:0, coins:0 };
+      var v = (rec.full || 0) + (rec.partial || 0);
+      if(v > max) max = v;
+      totalCoins += rec.coins || 0;
+      days.push({ d:d, rec:rec, v:v, today:(i === 0) });
+    }
+    var dn = document.getElementById("dailyNote");
+    if(max === 0){
+      box.innerHTML = '<div class="empty-note">Chưa có hoạt động nào trong 7 ngày qua. Xem quảng cáo để bắt đầu.</div>';
+      if(dn) dn.textContent = "";
+      return;
+    }
+    var html = '<div class="daily-chart">';
+    days.forEach(function(x){
+      var h = Math.max(5, Math.round(x.v / max * 62));
+      html += '<div class="dc-col' + (x.today ? " today" : "") + '"><span class="dc-val">' + x.v + '</span><div class="dc-bar" style="height:' + h + 'px"></div><span class="dc-lab">' + (x.today ? "Hôm nay" : labels[x.d.getDay()]) + '</span></div>';
+    });
+    html += '</div>';
+    box.innerHTML = html;
+    if(dn) dn.textContent = "Tổng xu nhận trong 7 ngày: " + fmtCoin(totalCoins) + " xu (gồm xem quảng cáo và điểm danh). Số trên mỗi cột là tổng lượt xem trong ngày.";
+  }
+  function renderRewardHistory(){
+    var box = document.getElementById("rewardHistory");
+    if(!box) return;
+    var list = state.rewardLog || [];
+    if(!list.length){ box.innerHTML = '<div class="empty-note">Chưa nhận xu lần nào.</div>'; return; }
+    var names = { full:"Xem hết quảng cáo", partial:"Xem nửa chừng / bỏ qua", checkin:"Điểm danh hàng ngày" };
+    box.innerHTML = list.slice(0, 12).map(function(r){
+      return '<div class="history-item"><div><b>' + esc(names[r.type] || "Nhận xu") + '</b><span>' + esc(new Date(r.t).toLocaleString("vi-VN")) + '</span></div><b style="color:var(--gold);white-space:nowrap">+' + fmtCoin(r.amount) + ' xu</b></div>';
+    }).join("");
+  }
+  function renderAdminOverview(){
+    var u = document.getElementById("admOvUsers");
+    if(!u || !isAdmin(currentUser)) return;
+    var keys = Object.keys(accounts);
+    u.textContent = fmt(keys.length);
+    var v = document.getElementById("admOvViews"); if(v) v.textContent = fmt(totalValidViews());
+    var pwd = 0;
+    keys.forEach(function(k){ (accounts[k].requests || []).forEach(function(r){ if((r.status || "pending") === "pending") pwd++; }); });
+    var w = document.getElementById("admOvWd"); if(w) w.textContent = fmt(pwd);
+    var pfg = 0;
+    try{ (forgotRequests || []).forEach(function(r){ if(r.status === "pending") pfg++; }); }catch(e){}
+    var f = document.getElementById("admOvFg"); if(f) f.textContent = fmt(pfg);
+  }
+  function totalWatched(){ return (state.fullCount||0) + (state.partialCount||0); }
+  function acctFull(a){ return (a.fullCount != null ? a.fullCount : (a.watchedCount || 0)); }
+  function acctPartial(a){ return a.partialCount || 0; }
+  function totalValidViews(){ var t=0; try{ Object.keys(accounts).forEach(function(k){ t += acctFull(accounts[k]); }); }catch(e){} return t; }
+  function acctCoins(a){ return a.coins || 0; }
+  function esc(s){ var d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+  var toastTimer=null;
+  function toast(msg){
+    var t=document.getElementById("toast");
+    t.textContent=msg; t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){ t.classList.remove("show"); },2300);
+  }
+  function renderAdminRevenue(){
+    var tc=document.getElementById("admTotalCoins");
+    if(!tc) return;
+    var tf=0, tp=0, coins=0, cFull=0, cPart=0, high=0;
+    Object.keys(accounts).forEach(function(k){
+      var a = accounts[k];
+      tf += acctFull(a); tp += acctPartial(a);
+      coins += a.coins || 0; cFull += a.coinsFull || 0; cPart += a.coinsPartial || 0; high += a.highWins || 0;
+    });
+    tc.textContent = fmtCoin(coins) + " xu";
+    var fv=document.getElementById("admFullViews"); if(fv) fv.textContent = fmt(tf);
+    var pv=document.getElementById("admPartialViews"); if(pv) pv.textContent = fmt(tp);
+    var cf=document.getElementById("admCoinsFull"); if(cf) cf.textContent = fmtCoin(cFull) + " xu";
+    var cp=document.getElementById("admCoinsPartial"); if(cp) cp.textContent = fmtCoin(cPart) + " xu";
+    var hw=document.getElementById("admHighWins"); if(hw) hw.textContent = fmt(high) + " lượt";
+    var tv=document.getElementById("admTotalViews"); if(tv) tv.textContent = fmt(tf + tp);
+    try{ renderRevShare(); }catch(e){}
+  }
+  /* ---------- Chia doanh thu cho người xem: chi tiết từng người, sửa được, tự động tính ---------- */
+  function renderRevShare(){
+    var gt = document.getElementById("rsGoogleTotal");
+    if(!gt || !isAdmin(currentUser)) return;
+    var perView = Math.max(0, parseFloat(revSettings.perViewUSD) || 0);
+    var pct = Math.min(100, Math.max(0, parseFloat(revSettings.adminPct) || 0));
+    var rate = Math.max(0, parseFloat(revSettings.usdVnd) || 0);
+    var tf = totalValidViews();
+    var google = tf * perView;
+    var keep = google * pct / 100;
+    var pool = google - keep;
+    gt.textContent = fmtUSD2(google) + " (" + fmt(Math.round(google * rate)) + "đ)";
+    var ak = document.getElementById("rsAdminKeep");
+    if(ak) ak.textContent = fmtUSD2(keep) + " (" + fmt(Math.round(keep * rate)) + "đ) · " + pct + "%";
+    var pl = document.getElementById("rsPool");
+    if(pl) pl.textContent = fmtUSD2(pool) + " (" + fmt(Math.round(pool * rate)) + "đ) · " + (100 - pct) + "%";
+    /* Đồng bộ ô nhập với cài đặt đã lưu (không ghi đè khi Admin đang gõ) */
+    var iv;
+    iv = document.getElementById("rsPerView"); if(iv && document.activeElement !== iv) iv.value = revSettings.perViewUSD;
+    iv = document.getElementById("rsAdminPct"); if(iv && document.activeElement !== iv) iv.value = revSettings.adminPct;
+    iv = document.getElementById("rsRate"); if(iv && document.activeElement !== iv) iv.value = revSettings.usdVnd;
+    var table = document.getElementById("rsTable");
+    if(!table) return;
+    var keys = Object.keys(accounts);
+    if(!keys.length){ table.innerHTML = '<div class="empty-note">Chưa có người xem nào.</div>'; return; }
+    keys.sort(function(a, b){ return acctFull(accounts[b]) - acctFull(accounts[a]); });
+    table.innerHTML = keys.map(function(k){
+      var a = accounts[k];
+      var full = acctFull(a), part = acctPartial(a);
+      var sharePct = tf > 0 ? full / tf * 100 : 0;
+      var usd = pool * (tf > 0 ? full / tf : 0);
+      return '<div class="history-item"><div><b>@' + esc(a.username) + ' · ID ' + a.id + '</b>' +
+        '<span>Xem hết: ' + fmt(full) + ' lượt · Xem nửa chừng: ' + fmt(part) + ' lượt<br/>Tỉ trọng: ' + (Math.round(sharePct * 100) / 100).toLocaleString("vi-VN") + '% của quỹ</span></div>' +
+        '<div style="text-align:right;flex:none"><b>' + fmtUSD2(usd) + '</b><span style="display:block;color:var(--muted);font-size:12px;margin-top:2px">' + fmt(Math.round(usd * rate)) + 'đ</span></div></div>';
+    }).join("");
+  }
+  ["rsPerView", "rsAdminPct", "rsRate"].forEach(function(id){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener("input", function(){
+      var v = parseFloat(el.value);
+      if(id === "rsPerView") revSettings.perViewUSD = isNaN(v) ? 0 : Math.max(0, v);
+      if(id === "rsAdminPct") revSettings.adminPct = isNaN(v) ? 0 : Math.min(100, Math.max(0, v));
+      if(id === "rsRate") revSettings.usdVnd = isNaN(v) ? 0 : Math.max(0, v);
+      try{ saveStore(); }catch(e){}
+      renderRevShare();
+    });
+  });
+  /* ---------- Storage bền vững (localStorage) — không mất khi tải lại trang ---------- */
+  var STORE_KEY = "wvtt_store_v2";
+  function saveStore(){
+    try{
+      var data = { accounts:accounts, usedIds:usedIds, deviceOwners:deviceOwners, deviceLogs:deviceLogs.slice(0,200), forgotRequests:forgotRequests, adsenseClient:adsenseClient, revSettings:revSettings, sessionKey: currentUser ? currentUser.username.toLowerCase() : null };
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      localStorage.setItem("wvtt_verify", "saved:" + new Date().toISOString() + ":accounts=" + Object.keys(accounts).length);
+    }catch(e){}
+  }
+  function reviveDate(v){ return v ? new Date(v) : null; }
+  function loadStore(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY); if(!raw) return null;
+      var d = JSON.parse(raw);
+      if(d.accounts){ Object.keys(d.accounts).forEach(function(k){ var a=d.accounts[k]; a.createdAt=reviveDate(a.createdAt); (a.requests||[]).forEach(function(r){ r.time=reviveDate(r.time); if(r.paidAt) r.paidAt=reviveDate(r.paidAt); }); (a.notifications||[]).forEach(function(n){ n.time=reviveDate(n.time); }); if(!a.notifications) a.notifications=[]; if(!a.checkin) a.checkin={lastDate:"",streak:0,total:0,coins:0,dates:[]}; }); accounts=d.accounts; }
+      if(d.usedIds) usedIds=d.usedIds; if(d.deviceOwners) deviceOwners=d.deviceOwners;
+      if(d.deviceLogs){ d.deviceLogs.forEach(function(l){ l.time=reviveDate(l.time); }); deviceLogs=d.deviceLogs; }
+      if(d.forgotRequests){ d.forgotRequests.forEach(function(r){ r.time=reviveDate(r.time); r.joinedAt=reviveDate(r.joinedAt); }); forgotRequests=d.forgotRequests; }
+      if(d.adsenseClient) adsenseClient=d.adsenseClient;
+      if(d.revSettings) revSettings=d.revSettings;
+      return d;
+    }catch(e){ return null; }
+  }
+  function earned(){ return state.coins || 0; }
+  function available(){ return earned() - state.requested; }
+  function fmtTime(sec){
+    if(sec < 60) return sec + " giây";
+    var m = Math.floor(sec/60), s = sec % 60;
+    return s ? m + " phút " + s + " giây" : m + " phút";
+  }
+
+  /* ---------- Render luồng quảng cáo ---------- */
+  var feed = document.getElementById("feed");
+  function fxHTML(seed){
+    var coins="",pos=[8,26,46,66,84,94],sizes=[26,20,30,21,27,19];
+    for(var c=0;c<pos.length;c++){var d=((seed*0.7+c*1.35)%6).toFixed(1);var dur=(6.5+((seed+c*2)%4)).toFixed(1);coins+='<span class="fx-coin" style="left:'+pos[c]+'%;width:'+sizes[c]+'px;height:'+sizes[c]+'px;font-size:'+Math.round(sizes[c]*0.5)+'px;--drift:'+((c%2? -12:14))+'px;animation-duration:'+dur+'s;animation-delay:'+d+'s">$</span>';}
+    return '<div class="fx-layer" aria-hidden="true">'+coins+'</div>';
+  }
+  function createSlide(i){
+    var el = document.createElement("section");
+    el.className = "slide"; el.dataset.ad = "ad" + i;
+    el.innerHTML =
+      '<div class="ad-head"><span class="ad-tag">Quảng cáo</span><span class="ad-no">Quảng cáo #' + i + '</span>' +
+      '<span class="ad-status" data-status>Chưa xem</span></div>' +
+      '<div class="ad-slot" data-adslot="' + i + '">' + fxHTML(i) +
+        '<div class="ad-real" data-adreal></div>' +
+        '<div data-adplaceholder>' +
+          '<div class="ad-ph-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="view-progress"><div class="bar"><i data-bar></i></div></div>' +
+      '<button type="button" class="skip-btn" data-skip>Bỏ qua</button>';
+    return el;
+  }
+  function appendAds(n){
+    for(var k=0; k<n; k++){
+      adCounter++;
+      var slide = createSlide(adCounter);
+      feed.appendChild(slide);
+      io.observe(slide);
+      /* Nếu Admin đã kích hoạt AdSense, ô mới cũng nhận quảng cáo thật */
+      if(adsenseClient) fillAdSlot(slide, adsenseClient);
+    }
+  }
+  function buildFeed(){
+    feed.innerHTML = "";
+    adCounter = 0;
+    appendAds(BATCH_ADS);
+  }
+
+  /* ---------- Ghi nhận lượt xem: cuộn TỰ DO — chưa xem hết vẫn vuốt tiếp được ----------
+     - Thời lượng hiển thị quảng cáo theo mặc định của Google, web không khóa cuộn.
+     - Xem đủ thời lượng -> ghi nhận "full": cộng xu ngẫu nhiên 0,02 – 1 xu
+       (chỉ ~10% lượt trúng mức cao 0,5 – 1 xu, còn lại 0,02 – 0,10 xu).
+     - Vuốt qua / bấm "Bỏ qua" khi chưa xem hết -> ghi nhận "partial": cộng 0,001 xu. */
+  var timers = {};
+  var watchProg = {};   // adId -> mili-giây đã xem tích lũy (tiến độ đã lưu, xem tiếp tính từ đây)
+  var watchStart = {};  // adId -> mốc thời gian bắt đầu đoạn đang chạy
+  var watchBase = {};   // adId -> tiến độ đã lưu tại lúc bắt đầu đoạn đang chạy
+  var activeSlide = null;
+  var watchPaused = false;  // đang tạm dừng tính giờ (mở mục khác / đăng xuất / thoát app)
+  var pageGone = false;     // app bị ẩn / thoát ra (pagehide)
+  var appBlurred = false;   // cửa sổ/app mất tiêu điểm (blur) — coi như đã rời luồng
+  /* Luồng chỉ được tính giờ khi đang thực sự ở trước mặt người dùng:
+     không ở Trang cá nhân / Chi tiết tài khoản (Admin) / màn hình đăng nhập,
+     app không bị ẩn, không mất tiêu điểm. */
+  function isFeedActive(){
+    if(watchPaused || pageGone || appBlurred || document.hidden) return false;
+    return isFeedActiveRaw();
+  }
+  /* Chụp lại tiến độ chính xác tới mili-giây tại thời điểm dừng */
+  function snapshotProg(id){
+    if(watchStart[id]){
+      var el = (watchBase[id] || 0) + (Date.now() - watchStart[id]);
+      watchProg[id] = Math.min(el, VIEW_SECONDS * 1000);
+    }
+  }
+  function setLocked(v){
+    if(v) feed.classList.add("locked"); else feed.classList.remove("locked");
+  }
+  function isLocked(){ return feed.classList.contains("locked"); }
+  function finishSlideUI(slide){
+    var hint = slide.querySelector("[data-lock-hint]");
+    if(hint){ hint.textContent = "✓ Đã ghi nhận — cuộn lên để xem quảng cáo tiếp theo"; hint.classList.add("unlocked"); }
+    var skip = slide.querySelector("[data-skip]"); if(skip) skip.hidden = true;
+    var swipe = slide.querySelector("[data-swipe-hint]"); if(swipe) swipe.hidden = false;
+  }
+  function syncAccountCounts(){
+    state.watchedCount = totalWatched();
+    if(currentUser){
+      currentUser.watchedCount = state.watchedCount;
+      currentUser.fullCount = state.fullCount;
+      currentUser.partialCount = state.partialCount;
+      currentUser.watchSeconds = state.watchSeconds;
+      currentUser.coins = state.coins;
+      currentUser.coinsFull = state.coinsFull;
+      currentUser.coinsPartial = state.coinsPartial;
+      currentUser.highWins = state.highWins;
+      currentUser.rewardLog = state.rewardLog;
+      currentUser.daily = state.daily;
+    }
+  }
+  function startTimer(slide){
+    var id = slide.dataset.ad;
+    if(!currentUser || state.watched[id] || timers[id] || !isFeedActive()) return;
+    var base = watchProg[id] || 0;
+    var started = Date.now();
+    watchStart[id] = started;
+    watchBase[id] = base;
+    var bar = slide.querySelector("[data-bar]");
+    var txt = slide.querySelector("[data-progress-text]");
+    timers[id] = setInterval(function(){
+      var elapsed = base + (Date.now() - started);
+      watchProg[id] = elapsed;
+      var pct = Math.min(100, elapsed / (VIEW_SECONDS * 1000) * 100);
+      if(bar) bar.style.transform = "scaleX(" + (pct / 100) + ")";
+      if(pct >= 100){
+        clearInterval(timers[id]); delete timers[id]; delete watchStart[id]; delete watchBase[id];
+        markFull(slide, id);
+      }
+    }, 100);
+  }
+  /* Tạm dừng tính giờ: đang xem mà chuyển sang mục khác (Trang cá nhân / Admin)
+     hoặc thoát ra / ẩn app thì DỪNG lại và KHÔNG tính lượt đó — giữ nguyên tiến độ
+     đã xem, quay lại xem tiếp mới tính tiếp. */
+  function haltTimers(){
+    Object.keys(timers).forEach(function(id){
+      snapshotProg(id);   // lưu đúng tiến độ đã xem tới thời điểm dừng — KHÔNG tính lượt này
+      clearInterval(timers[id]); delete timers[id];
+      delete watchStart[id]; delete watchBase[id];
+      var slideEl = feed.querySelector('[data-ad="' + id + '"]');
+      if(slideEl && !state.watched[id]){
+        var bar = slideEl.querySelector("[data-bar]");
+        var pct = Math.min(100, (watchProg[id] || 0) / (VIEW_SECONDS * 1000) * 100);
+        if(bar) bar.style.transform = "scaleX(" + (pct / 100) + ")";
+      }
+    });
+  }
+  function syncWatchPause(){
+    var wantPaused = pageGone || appBlurred || document.hidden || !isFeedActiveRaw();
+    if(wantPaused && !watchPaused){
+      watchPaused = true;
+      haltTimers();
+    } else if(!wantPaused && watchPaused){
+      watchPaused = false;
+      /* Quay lại luồng: tính tiếp từ đúng tiến độ đã lưu của quảng cáo đang xem */
+      if(activeSlide && currentUser && !state.watched[activeSlide.dataset.ad]) startTimer(activeSlide);
+    }
+  }
+  function isFeedActiveRaw(){
+    var ids = ["profileView", "acctView", "authView", "notiView", "checkinView"];
+    for(var i=0; i<ids.length; i++){
+      var el = document.getElementById(ids[i]);
+      if(el && !el.hidden) return false;
+    }
+    return true;
+  }
+  function pauseWatching(){ syncWatchPause(); }
+  function resumeWatching(){ syncWatchPause(); }
+  document.addEventListener("visibilitychange", syncWatchPause);
+  document.addEventListener("freeze", function(){ pageGone = true; syncWatchPause(); });
+  document.addEventListener("resume", function(){ pageGone = false; syncWatchPause(); });
+  window.addEventListener("pagehide", function(){ pageGone = true; watchPaused = true; haltTimers(); });
+  window.addEventListener("pageshow", function(){ pageGone = false; syncWatchPause(); });
+  window.addEventListener("beforeunload", function(){ watchPaused = true; haltTimers(); });
+  window.addEventListener("blur", function(){ appBlurred = true; syncWatchPause(); });
+  window.addEventListener("focus", function(){ appBlurred = false; syncWatchPause(); });
+  function stopTimer(slide, creditPartial){
+    var id = slide.dataset.ad;
+    if(timers[id]){ snapshotProg(id); clearInterval(timers[id]); delete timers[id]; }
+    delete watchStart[id]; delete watchBase[id];
+    if(!state.watched[id] && creditPartial && currentUser && (watchProg[id] || 0) > 0){
+      markPartial(slide, id);
+      return;
+    }
+    if(!state.watched[id]){
+      /* Giữ nguyên tiến độ đã xem khi quay lại — không reset về 0 */
+      var bar = slide.querySelector("[data-bar]");
+      var pct = Math.min(100, (watchProg[id] || 0) / (VIEW_SECONDS * 1000) * 100);
+      if(bar) bar.style.transform = "scaleX(" + (pct / 100) + ")";
+    }
+  }
+  function markFull(slide, id){
+    if(state.watched[id]) return;
+    state.watched[id] = "full";
+    state.fullCount++;
+    state.watchSeconds += VIEW_SECONDS;
+    var rw = rewardFull();
+    state.lastReward = rw;
+    state.coins = Math.round((state.coins + rw) * 1000) / 1000;
+    state.coinsFull = Math.round((state.coinsFull + rw) * 1000) / 1000;
+    if(rw >= 0.5) state.highWins++;
+    trackDaily("full", rw);
+    logReward("full", rw);
+    syncAccountCounts();
+    var fullBar = slide.querySelector("[data-bar]");
+    if(fullBar) fullBar.style.transform = "scaleX(1)";
+    var st = slide.querySelector("[data-status]");
+    if(st){ st.textContent = "✓ Đã xem hết"; st.classList.add("done"); st.classList.remove("partial"); }
+    var txt = slide.querySelector("[data-progress-text]");
+    if(txt) txt.textContent = "Đã xem hết quảng cáo · Lượt xem đã được ghi nhận";
+    finishSlideUI(slide);
+    renderStats();
+    pulseHud();
+    try{ saveStore(); }catch(e){}
+    try{ renderAdminRevenue(); }catch(e){}
+    /* Xem hết: ghi nhận thầm lặng — không hiện ghi chú/thông báo trên luồng */
+  }
+  /* Giữ tương thích tên cũ */
+  function markWatched(slide, id){ markFull(slide, id); }
+  function markPartial(slide, id){
+    if(state.watched[id]) return;
+    state.watched[id] = "partial";
+    state.partialCount++;
+    state.watchSeconds += Math.round((watchProg[id] || 0) / 1000);
+    state.coins = Math.round((state.coins + COIN_PARTIAL) * 1000) / 1000;
+    state.coinsPartial = Math.round((state.coinsPartial + COIN_PARTIAL) * 1000) / 1000;
+    trackDaily("partial", COIN_PARTIAL);
+    logReward("partial", COIN_PARTIAL);
+    syncAccountCounts();
+    var st = slide.querySelector("[data-status]");
+    if(st){ st.textContent = "◐ Xem nửa chừng"; st.classList.add("partial"); st.classList.remove("done"); }
+    var txt = slide.querySelector("[data-progress-text]");
+    if(txt) txt.textContent = "Xem chưa hết quảng cáo · Lượt này chưa được tính hợp lệ";
+    finishSlideUI(slide);
+    renderStats();
+    try{ saveStore(); }catch(e){}
+    try{ renderAdminRevenue(); }catch(e){}
+    /* Bỏ qua / xem nửa chừng: ghi nhận thầm lặng — không hiện thông báo, không lộ số tiền hay tỷ lệ */
+  }
+  /* Bỏ qua: ghi nhận lượt nửa chừng rồi mới cho cuộn sang quảng cáo tiếp theo */
+  feed.addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-skip]") : null;
+    if(!btn) return;
+    var slide = btn.closest(".slide");
+    if(!slide || state.watched[slide.dataset.ad]) return;
+    var id = slide.dataset.ad;
+    if(timers[id]){ clearInterval(timers[id]); delete timers[id]; }
+    delete watchStart[id];
+    markPartial(slide, id);
+    var next = slide.nextElementSibling;
+    if(!next){ appendAds(BATCH_ADS); next = slide.nextElementSibling; }
+    if(next) setTimeout(function(){ try{ next.scrollIntoView({ behavior:"smooth", block:"start" }); }catch(err){} }, 60);
+  });
+  /* Cuộn tự do: không chặn bánh xe / vuốt — chưa xem hết vẫn cuộn tiếp được */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.intersectionRatio >= 0.7){
+        activeSlide = e.target;
+        startTimer(e.target);
+        /* Cuộn vô hạn: thấy quảng cáo cuối cùng là nạp thêm một đợt mới */
+        if(e.target === feed.lastElementChild) appendAds(BATCH_ADS);
+      } else {
+        var wasActive = (activeSlide === e.target);
+        /* Vuốt qua khi chưa xem hết và đã xem được một lúc -> tính lượt nửa chừng.
+           Đang rời luồng (mục khác / đăng xuất / ẩn app) thì KHÔNG tính gì cả —
+           lượt đó chỉ được tính khi quay lại xem tiếp tới nơi. */
+        stopTimer(e.target, wasActive && isFeedActive());
+        if(wasActive) activeSlide = null;
+      }
+    });
+  }, { root: feed, threshold: [0, 0.7, 1] });
+
+  /* ---------- Các tab RIÊNG BIỆT ở giao diện chính: Trang cá nhân / Thông báo / Điểm danh ----------
+     Mỗi tab là một màn hình riêng. Mở tab này thì tab kia đang mở tự động thu gọn (đóng) lại —
+     chỉ 1 tab mở tại 1 thời điểm. Thông báo và Điểm danh KHÔNG còn nằm trong Trang cá nhân nữa. */
+  var profileView = document.getElementById("profileView");
+  var notiView = document.getElementById("notiView");
+  var checkinView = document.getElementById("checkinView");
+  var tabViews = [profileView, notiView, checkinView];
+  function showTab(view){
+    tabViews.forEach(function(v){ if(v) v.hidden = (v !== view); });
+    if(view){ pauseWatching(); } else { resumeWatching(); }
+  }
+  function openProfile(){ if(!currentUser) return; watchPaused = true; haltTimers(); renderStats(); renderAccount(); showTab(profileView); pauseWatching(); }
+  function closeProfile(){ showTab(null); }
+  document.getElementById("openProfile").addEventListener("click", openProfile);
+  document.getElementById("closeProfile").addEventListener("click", closeProfile);
+  /* Nút Thông báo ở giao diện chính: mở màn hình Thông báo RIÊNG (tự đóng tab đang mở khác) */
+  function openNotifications(){
+    if(!currentUser) return;
+    watchPaused = true; haltTimers();
+    renderNotifications();
+    showTab(notiView);
+    pauseWatching();
+  }
+  function closeNotifications(){ showTab(null); }
+  var notiTopBtn = document.getElementById("openNotiTop");
+  if(notiTopBtn) notiTopBtn.addEventListener("click", openNotifications);
+  var closeNotiBtn = document.getElementById("closeNoti");
+  if(closeNotiBtn) closeNotiBtn.addEventListener("click", closeNotifications);
+  /* Điểm danh: mở màn hình Điểm danh RIÊNG (tự đóng tab đang mở khác) */
+  function openCheckin(){
+    if(!currentUser) return;
+    watchPaused = true; haltTimers();
+    renderCheckin();
+    showTab(checkinView);
+    pauseWatching();
+  }
+  function closeCheckin(){ showTab(null); }
+  var closeCheckinBtn = document.getElementById("closeCheckin");
+  if(closeCheckinBtn) closeCheckinBtn.addEventListener("click", closeCheckin);
+
+  function renderStats(){
+    var total = totalWatched();
+    state.watchedCount = total;
+    document.getElementById("stWatched").textContent = fmt(total);
+    document.getElementById("stValid").textContent = fmt(state.fullCount || 0);
+    var sf = document.getElementById("stFull"); if(sf) sf.textContent = fmt(state.fullCount || 0);
+    var sp = document.getElementById("stPartial"); if(sp) sp.textContent = fmt(state.partialCount || 0);
+    document.getElementById("stToday").textContent = fmt(total);
+    document.getElementById("stTime").textContent = fmtTime(state.watchSeconds || (state.fullCount || 0) * VIEW_SECONDS);
+    var se = document.getElementById("stEarned"); if(se) se.textContent = fmtCoin(earned()) + " xu";
+    var sl = document.getElementById("stLastReward"); if(sl) sl.textContent = state.lastReward ? ("+" + fmtCoin(state.lastReward) + " xu") : "—";
+    document.getElementById("balAvailable").textContent = fmtCoin(available());
+    document.getElementById("balEarned").textContent = fmtCoin(earned()) + " xu";
+    document.getElementById("balRequested").textContent = fmtCoin(state.requested) + " xu";
+    var pct = Math.min(100, Math.round(available() / MIN_WITHDRAW * 100));
+    document.getElementById("stProgressBar").style.width = pct + "%";
+    document.getElementById("stProgressText").textContent = pct + "%";
+    var miniWatched = document.querySelector("#miniWatched b");
+    if(miniWatched) miniWatched.textContent = fmt(total);
+    var miniBalance = document.querySelector("#miniBalance b");
+    if(miniBalance) miniBalance.textContent = fmtCoin(available()) + " xu";
+    var hb = document.getElementById("hudBalance");
+    if(hb) hb.textContent = fmtCoin(available()) + " xu";
+    var hw = document.getElementById("hudWatched");
+    if(hw) hw.textContent = "· " + fmt(total) + " đã xem";
+    try{ renderLevel(); renderDailyChart(); renderRewardHistory(); }catch(e){}
+  }
+
+  /* ---------- Rút tiền: trạng thái duyệt ---------- */
+  function wdBadge(st){
+    if(st === "paid") return '<span class="st-badge on">Đã thanh toán</span>';
+    if(st === "approved") return '<span class="st-badge on">Đã duyệt · chờ thanh toán</span>';
+    if(st === "rejected") return '<span class="st-badge off">Bị từ chối</span>';
+    return '<span class="st-badge adm">Chờ duyệt</span>';
+  }
+  /* ---------- Thông báo cho người dùng ---------- */
+  function addNotification(key, title, body){
+    var acc = accounts[key]; if(!acc) return;
+    if(!acc.notifications) acc.notifications = [];
+    acc.notifications.unshift({ id: "TB-" + Date.now() + "-" + Math.floor(Math.random()*999), time: new Date(), title: title, body: body, read: false });
+    acc.notifications = acc.notifications.slice(0, 100);
+    if(currentUser && currentUser.username.toLowerCase() === key) renderNotifications();
+    try{ saveStore(); }catch(e){}
+  }
+  function renderNotifications(){
+    var box = document.getElementById("notiList"); var badge = document.getElementById("notiBadge");
+    var badgeTop = document.getElementById("notiBadgeTop");
+    if(!currentUser){ if(badgeTop){ badgeTop.hidden = true; } if(badge){ badge.hidden = true; } return; }
+    if(!box) return;
+    var list = currentUser.notifications || [];
+    var unread = list.filter(function(n){ return !n.read; }).length;
+    if(badge){ badge.hidden = unread === 0; badge.textContent = unread; }
+    if(badgeTop){ badgeTop.hidden = unread === 0; badgeTop.textContent = unread > 99 ? "99+" : unread; }
+    if(!list.length){ box.innerHTML = '<div class="empty-note">Chưa có thông báo nào.</div>'; return; }
+    box.innerHTML = list.map(function(n){
+      var t = n.time ? new Date(n.time).toLocaleString("vi-VN") : "";
+      return '<div class="noti-item' + (n.read ? "" : " unread") + '"><b>' + esc(n.title) + '</b><p>' + esc(n.body) + '</p><time>' + esc(t) + '</time></div>';
+    }).join("");
+  }
+  /* ---------- Điểm danh hàng ngày ---------- */
+  function todayKey(d){ d = d || new Date(); return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0"); }
+  function syncCheckinTop(){
+    var b = document.getElementById("checkinTopBtn");
+    if(!b) return;
+    if(!currentUser){ b.hidden = true; return; }
+    if(!currentUser.checkin) currentUser.checkin = { lastDate:"", streak:0, total:0, coins:0, dates:[] };
+    /* Đã điểm danh hôm nay -> tự ẩn nút ở giao diện chính; chưa điểm danh (kể cả sang ngày mới) -> hiện lại */
+    b.hidden = currentUser.checkin.lastDate === todayKey();
+  }
+  function renderCheckin(){
+    if(!currentUser){ syncCheckinTop(); return; }
+    if(!currentUser.checkin) currentUser.checkin = { lastDate:"", streak:0, total:0, coins:0, dates:[] };
+    var ci = currentUser.checkin;
+    var doneToday = ci.lastDate === todayKey();
+    syncCheckinTop();
+    var st = document.getElementById("ciStreak"); if(st) st.textContent = ci.streak || 0;
+    var tot = document.getElementById("ciTotal"); if(tot) tot.textContent = "Tổng lượt điểm danh: " + fmt(ci.total||0) + " · Xu điểm danh đã nhận: " + fmtCoin(ci.coins||0) + " xu";
+    var head = document.getElementById("checkinHeadStat"); if(head) head.textContent = doneToday ? "Hôm nay đã điểm danh" : "Chưa điểm danh hôm nay";
+    var btn = document.getElementById("ciBtn");
+    if(btn){ btn.disabled = doneToday; btn.textContent = doneToday ? "✓ Đã điểm danh hôm nay" : "Điểm danh hôm nay · +0,5 xu"; }
+    var daysBox = document.getElementById("ciDays");
+    if(daysBox){
+      var html = "", labels = ["CN","T2","T3","T4","T5","T6","T7"];
+      for(var i=6;i>=0;i--){
+        var d = new Date(); d.setDate(d.getDate()-i); var k = todayKey(d);
+        var done = (ci.dates||[]).indexOf(k) >= 0;
+        html += '<span class="' + (done ? "done" : "") + (i===0 ? " today" : "") + '">' + labels[d.getDay()] + '</span>';
+      }
+      daysBox.innerHTML = html;
+    }
+  }
+  document.getElementById("notiReadAll").addEventListener("click", function(){
+    if(!currentUser) return;
+    (currentUser.notifications || []).forEach(function(n){ n.read = true; });
+    renderNotifications(); try{ saveStore(); }catch(e){}
+  });
+  function doCheckin(){
+    if(!currentUser) return;
+    if(!currentUser.checkin) currentUser.checkin = { lastDate:"", streak:0, total:0, coins:0, dates:[] };
+    var ci = currentUser.checkin, tk = todayKey();
+    if(ci.lastDate === tk){ syncCheckinTop(); toast("Hôm nay bạn đã điểm danh rồi"); return; }
+    var y = new Date(); y.setDate(y.getDate()-1);
+    ci.streak = (ci.lastDate === todayKey(y)) ? (ci.streak||0) + 1 : 1;
+    ci.lastDate = tk; ci.total = (ci.total||0) + 1; ci.coins = Math.round(((ci.coins||0) + CHECKIN_REWARD)*1000)/1000;
+    if(!ci.dates) ci.dates = []; ci.dates.push(tk); ci.dates = ci.dates.slice(-60);
+    state.coins = Math.round((state.coins + CHECKIN_REWARD)*1000)/1000;
+    trackDaily("checkin", CHECKIN_REWARD);
+    logReward("checkin", CHECKIN_REWARD);
+    syncAccountCounts(); renderStats(); renderCheckin();
+    /* Điểm danh xong: nút Điểm danh ở giao diện chính tự ẩn ngay */
+    syncCheckinTop();
+    addNotification(currentUser.username.toLowerCase(), "Điểm danh thành công", "Bạn nhận +" + fmtCoin(CHECKIN_REWARD) + " xu điểm danh ngày " + new Date().toLocaleDateString("vi-VN") + ". Chuỗi hiện tại: " + ci.streak + " ngày.");
+    toast("Điểm danh thành công · +" + fmtCoin(CHECKIN_REWARD) + " xu");
+    try{ saveStore(); }catch(e){}
+  }
+  document.getElementById("ciBtn").addEventListener("click", doCheckin);
+  /* Nút Điểm danh ở giao diện chính (cạnh nút Thông báo + Trang cá nhân): mở màn hình Điểm danh RIÊNG BIỆT.
+     Điểm danh xong nút này tự ẩn, ngày mới tự hiện lại (syncCheckinTop). */
+  var checkinTopBtn = document.getElementById("checkinTopBtn");
+  if(checkinTopBtn) checkinTopBtn.addEventListener("click", openCheckin);
+  /* Theo thời gian thực: sang ngày mới là nút Điểm danh tự hiện lại, không cần tải lại trang.
+     - Hẹn giờ đúng 00:00:01 ngày hôm sau.
+     - Kiểm tra định kỳ mỗi 20 giây (phòng khi máy ngủ / đổi giờ).
+     - Kiểm tra lại mỗi khi quay lại app (hiện tab, lấy lại tiêu điểm). */
+  var checkinMidnightTimer = null;
+  function scheduleCheckinMidnight(){
+    if(checkinMidnightTimer) clearTimeout(checkinMidnightTimer);
+    var now = new Date();
+    var next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+    checkinMidnightTimer = setTimeout(function(){
+      if(currentUser) renderCheckin(); else syncCheckinTop();
+      scheduleCheckinMidnight();
+    }, Math.max(1000, next - now));
+  }
+  scheduleCheckinMidnight();
+  setInterval(function(){ if(currentUser) renderCheckin(); else syncCheckinTop(); }, 20000);
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden){ if(currentUser) renderCheckin(); else syncCheckinTop(); } });
+  window.addEventListener("focus", function(){ if(currentUser) renderCheckin(); else syncCheckinTop(); });
+  window.addEventListener("pageshow", function(){ if(currentUser) renderCheckin(); else syncCheckinTop(); });
+  function renderWithdrawHistory(){
+    var box = document.getElementById("withdrawHistory");
+    if(!box) return;
+    if(!state.requests.length){ box.innerHTML = '<div class="empty-note">Chưa có yêu cầu rút tiền nào.</div>'; return; }
+    box.innerHTML = state.requests.map(function(r){
+      return '<div class="history-item"><div><b>' + esc(r.code) + ' · ' + fmtCoin(r.amount) + ' xu</b><span>' + esc(r.method) + ' · ' + esc(r.name) + ' · ' + esc(r.account) + (r.note ? '<br/>Ghi chú: ' + esc(r.note) : '') + '</span></div>' + wdBadge(r.status || "pending") + '</div>';
+    }).join("");
+  }
+  var wdDetailOpen = {}; // code -> true (Admin đang mở xem chi tiết)
+  /* ---------- QR thông tin ví MoMo / ZaloPay ----------
+     Chỉ hỗ trợ rút về ví MoMo và ví ZaloPay (không rút ngân hàng).
+     QR chứa đầy đủ thông tin Admin cần để chuyển tiền trong app ví:
+     loại ví, số điện thoại ví, họ tên chủ ví, số tiền (xu) và ghi chú ngẫu nhiên.
+     Quét QR bằng camera/app ví là đọc được toàn bộ thông tin này. */
+  function buildWalletQR(r){
+    if(!r) return "";
+    var phone = String(r.account || "").replace(/\s+/g, "");
+    if(!/^0\d{9}$/.test(phone)) return "";
+    return "RUT XU " + (r.code || "") + "\n" +
+      "Vi: " + (r.method || "") + "\n" +
+      "So dien thoai vi: " + phone + "\n" +
+      "Chu vi: " + (r.name || "") + "\n" +
+      "So tien: " + fmtCoin(r.amount) + " xu\n" +
+      "Ghi chu: " + (r.note || "");
+  }
+  function wdQrText(r){ return buildWalletQR(r); }
+  function renderWdQRs(){
+    document.querySelectorAll("[data-qr-for]").forEach(function(holder){
+      if(holder.dataset.done) return; holder.dataset.done = "1";
+      var code = holder.getAttribute("data-qr-for");
+      var found = null;
+      Object.keys(accounts).forEach(function(k){ (accounts[k].requests||[]).forEach(function(r){ if(r.code===code) found=r; }); });
+      if(!found) return;
+      var payload = buildWalletQR(found);
+      if(!payload){ holder.innerHTML = '<div style="font-size:12.5px;line-height:1.6;color:#b42318">Chưa tạo được QR: lệnh này không có số điện thoại ví MoMo/ZaloPay hợp lệ (10 số, bắt đầu bằng 0). Hãy tạo lệnh rút mới.</div>'; return; }
+      try{
+        if(window.QRCode){ new QRCode(holder, { text: payload, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M }); }
+        else holder.innerHTML = '<div style="font-size:11px;word-break:break-all">' + esc(payload) + '</div>';
+      }catch(err){ holder.innerHTML = '<div style="font-size:11px;word-break:break-all">' + esc(payload) + '</div>'; }
+    });
+  }
+  function renderAdminWithdrawals(){
+    var box = document.getElementById("adminWdList");
+    if(!box) return;
+    if(!isAdmin(currentUser)){ box.innerHTML = ""; return; }
+    var all = [];
+    Object.keys(accounts).forEach(function(k){
+      (accounts[k].requests || []).forEach(function(r){ all.push({ key:k, acc:accounts[k], req:r }); });
+    });
+    if(!all.length){ box.innerHTML = '<div class="empty-note">Chưa có yêu cầu rút xu nào.</div>'; return; }
+    box.innerHTML = all.map(function(it){
+      var r = it.req, acc = it.acc, st = r.status || "pending";
+      var full = acctFull(acc), part = acctPartial(acc);
+      var validNote = full > 0 ? "Có " + fmt(full) + " lượt xem hết hợp lệ để đối chiếu." : "Chưa có lượt xem hết nào — cần kiểm tra kỹ trước khi duyệt.";
+      var detail = "";
+      if(wdDetailOpen[r.code]){
+        detail = '<div class="wd-detail"><b>Chi tiết kiểm tra quảng cáo</b><br/>' +
+          'Người dùng: @' + esc(acc.username) + ' · ID ' + acc.id + '<br/>' +
+          'Xem hết (hợp lệ): <b>' + fmt(full) + ' lượt</b> · Xem nửa chừng / bỏ qua: <b>' + fmt(part) + ' lượt</b><br/>' +
+          'Tổng xu đã tích lũy: <b>' + fmtCoin(acctCoins(acc)) + ' xu</b> · Đã yêu cầu rút: <b>' + fmtCoin(acc.requestedTotal||0) + ' xu</b><br/>' +
+          'Nhận xét: ' + esc(validNote) + '<br/>' +
+          'Ví nhận: <b>' + esc(r.method || "—") + '</b> · Số điện thoại ví: <b>' + esc(r.account) + '</b><br/>' +
+          'Chủ ví: <b>' + esc(r.name) + '</b> · Số tiền: <b>' + fmtCoin(r.amount) + ' xu</b><br/>' +
+          'Ghi chú chuyển tiền (ngẫu nhiên): <b>' + esc(r.note || "—") + '</b>' +
+          (st === "approved" || st === "paid"
+            ? '<div class="qr-box"><span class="qr-bank">Ví MoMo / ZaloPay</span><div style="font-weight:800;margin-top:8px">QR thông tin ví — quét để xem thông tin chuyển tiền</div><div class="qr-holder" data-qr-for="' + esc(r.code) + '"></div><p><b>' + esc(r.method) + '</b> · SĐT ví ' + esc(r.account) + '</p><p>' + esc(r.name) + '</p><p>Số tiền: <b>' + fmtCoin(r.amount) + ' xu</b></p><p class="qr-note">Ghi chú: ' + esc(r.note || "") + '</p><p style="color:#555">QR đã chứa sẵn loại ví, số điện thoại ví, họ tên, số tiền và ghi chú — Admin mở ví MoMo/ZaloPay và chuyển tiền theo thông tin này.</p></div>'
+            : '<div style="margin-top:8px;color:var(--gold)">QR thông tin ví chỉ hiện sau khi bấm Duyệt.</div>') +
+          '</div>';
+      }
+      var actions = '<span class="wd-actions">' +
+        '<button type="button" class="mini-btn ok" data-wd-act="detail" data-wd-key="' + esc(it.key) + '" data-wd-code="' + esc(r.code) + '">' + (wdDetailOpen[r.code] ? "Đóng chi tiết" : "Xem chi tiết") + '</button>';
+      if(st === "pending") actions += '<button type="button" class="mini-btn ok" data-wd-act="approve" data-wd-key="' + esc(it.key) + '" data-wd-code="' + esc(r.code) + '">Duyệt</button><button type="button" class="mini-btn no" data-wd-act="reject" data-wd-key="' + esc(it.key) + '" data-wd-code="' + esc(r.code) + '">Từ chối</button>';
+      if(st === "approved") actions += '<button type="button" class="mini-btn ok" data-wd-act="paid" data-wd-key="' + esc(it.key) + '" data-wd-code="' + esc(r.code) + '">Đã thanh toán</button>';
+      actions += '</span>';
+      return '<div class="history-item" style="flex-wrap:wrap"><div style="flex:1;min-width:180px"><b>' + esc(r.code) + ' · ' + fmtCoin(r.amount) + ' xu</b><span>@' + esc(acc.username) + ' (ID ' + acc.id + ') · ' + esc(r.method) + '<br/>' + esc(r.name) + ' · ' + esc(r.account) + (r.time ? '<br/>' + esc(new Date(r.time).toLocaleString("vi-VN")) : '') + '</span></div><div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end">' + wdBadge(st) + actions + '</div>' + detail + '</div>';
+    }).join("");
+    renderWdQRs();
+    try{ renderAdminOverview(); }catch(e){}
+  }
+  document.getElementById("adminWdList").addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-wd-act]") : null;
+    if(!btn || !isAdmin(currentUser)) return;
+    var key = btn.getAttribute("data-wd-key"), code = btn.getAttribute("data-wd-code"), act = btn.getAttribute("data-wd-act");
+    var acc = accounts[key]; if(!acc) return;
+    var req = null;
+    (acc.requests || []).forEach(function(r){ if(r.code === code) req = r; });
+    if(!req) return;
+    if(act === "detail"){ wdDetailOpen[code] = !wdDetailOpen[code]; renderAdminWithdrawals(); return; }
+    if(act === "approve" && (req.status === "pending" || !req.status)){
+      req.status = "approved"; wdDetailOpen[code] = true;
+      addLog("Admin duyệt rút xu", acc.username, false, req.code + " · " + fmtCoin(req.amount) + " xu · QR đã hiện cho Admin");
+      addNotification(key, "Lệnh rút xu đã được duyệt", "Lệnh " + req.code + " · " + fmtCoin(req.amount) + " xu đã được Admin duyệt và đang chờ thanh toán. Nội dung chuyển khoản: " + (req.note || "") + ".");
+      toast("Đã duyệt " + req.code + " · QR đã hiện");
+    } else if(act === "paid" && req.status === "approved"){
+      req.status = "paid"; req.paidAt = new Date();
+      addLog("Admin đã thanh toán rút xu", acc.username, false, req.code + " · " + fmtCoin(req.amount) + " xu");
+      addNotification(key, "Đã thanh toán rút xu", "Lệnh " + req.code + " · " + fmtCoin(req.amount) + " xu đã được thanh toán tới " + req.method + " · " + req.account + " (" + req.name + "). Nội dung: " + (req.note || "") + ".");
+      toast("Đã thanh toán " + req.code + " · đã thông báo cho @" + acc.username);
+    } else if(act === "reject" && (req.status === "pending" || !req.status)){
+      req.status = "rejected";
+      acc.requestedTotal = Math.max(0, (acc.requestedTotal || 0) - req.amount);
+      if(acc === currentUser){ state.requested = acc.requestedTotal; renderStats(); }
+      addLog("Admin từ chối rút xu", acc.username, true, req.code + " · hoàn " + fmtCoin(req.amount) + " xu về số dư");
+      addNotification(key, "Lệnh rút xu bị từ chối", "Lệnh " + req.code + " · " + fmtCoin(req.amount) + " xu bị từ chối, số xu đã hoàn về số dư của bạn.");
+      toast("Đã từ chối " + req.code + " · hoàn xu về số dư");
+    } else return;
+    try{ saveStore(); }catch(err){}
+    renderAdminWithdrawals(); renderWithdrawHistory();
+    if(selectedAcctKey) renderAcctDetail();
+  });
+
+  /* ---------- Quên mật khẩu: người dùng gửi yêu cầu, Admin duyệt ---------- */
+  var forgotRequests = [];   // {key, username, userId, joinedAt, time, newPassHash, status}
+  function renderAdminForgot(){
+    var box = document.getElementById("adminForgotList");
+    if(!box) return;
+    if(!isAdmin(currentUser)){ box.innerHTML = ""; return; }
+    if(!forgotRequests.length){ box.innerHTML = '<div class="empty-note">Chưa có yêu cầu quên mật khẩu nào.</div>'; return; }
+    box.innerHTML = forgotRequests.map(function(r, idx){
+      var right = r.status === "pending"
+        ? '<span class="wd-actions"><button type="button" class="mini-btn ok" data-fg-act="approve" data-fg-idx="' + idx + '">Duyệt</button>' +
+          '<button type="button" class="mini-btn no" data-fg-act="reject" data-fg-idx="' + idx + '">Từ chối</button></span>'
+        : (r.status === "approved" ? (r.done ? '<span class="st-badge on">Đã đặt mật khẩu mới</span>' : '<span class="st-badge adm">Đã duyệt · chờ đặt mật khẩu</span>') : '<span class="st-badge off">Bị từ chối</span>');
+      return '<div class="history-item"><div><b>@' + esc(r.username) + ' · ID: ' + r.userId + '</b>' +
+        '<span>Ngày tham gia: ' + esc(r.joinedAt ? r.joinedAt.toLocaleString("vi-VN") : "—") + '<br/>Ngày quên mật khẩu: ' + esc(r.time.toLocaleString("vi-VN")) + '</span></div>' + right + '</div>';
+    }).join("");
+  }
+  document.getElementById("adminForgotList").addEventListener("click", function(e){
+    var btn = e.target && e.target.closest ? e.target.closest("[data-fg-act]") : null;
+    if(!btn || !isAdmin(currentUser)) return;
+    var r = forgotRequests[parseInt(btn.getAttribute("data-fg-idx"), 10)];
+    if(!r || r.status !== "pending") return;
+    var acc = accounts[r.key];
+    if(btn.getAttribute("data-fg-act") === "approve"){
+      if(acc){ acc.forceNewPass = true; delete loginFails[r.key]; }
+      r.status = "approved";
+      addLog("Admin duyệt quên mật khẩu", r.username, false, "ID " + r.userId + " · người dùng sẽ đặt mật khẩu mới khi đăng nhập lại");
+      toast("Đã duyệt · @" + r.username + " sẽ đặt mật khẩu mới khi đăng nhập lại");
+    } else {
+      r.status = "rejected";
+      addLog("Admin từ chối quên mật khẩu", r.username, true, "ID " + r.userId + " · mật khẩu cũ giữ nguyên");
+      toast("Đã từ chối yêu cầu của @" + r.username);
+    }
+    renderAdminForgot();
+  });
+
+  /* Mở / đóng form quên mật khẩu */
+  var resetForm = document.getElementById("resetForm");
+  document.getElementById("forgotBtn").addEventListener("click", function(){
+    loginForm.hidden = true; registerForm.hidden = true; resetForm.hidden = false;
+  });
+  document.getElementById("resetBack").addEventListener("click", function(){
+    resetForm.hidden = true; setTab(false);
+  });
+  resetForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("resetMsg");
+    var user = document.getElementById("rpUser").value.trim();
+    var pass = document.getElementById("rpPass").value;
+    var pass2 = document.getElementById("rpPass2").value;
+    var key = user.toLowerCase();
+    var acc = accounts[key];
+    if(!acc){ showMsg(msg, "Không tìm thấy tài khoản @" + user + ". Kiểm tra lại username.", false); return; }
+    if(pass.length < 6){ showMsg(msg, "Mật khẩu mới phải có ít nhất 6 ký tự.", false); return; }
+    if(pass !== pass2){ showMsg(msg, "Mật khẩu nhập lại chưa khớp.", false); return; }
+    if(acc.forceNewPass){ showMsg(msg, "Admin đã duyệt yêu cầu trước của bạn. Quay lại Đăng nhập, nhập username của bạn để đặt mật khẩu mới.", false); return; }
+    var pending = forgotRequests.some(function(r){ return r.key === key && r.status === "pending"; });
+    if(pending){ showMsg(msg, "Tài khoản này đã có yêu cầu đang chờ Admin duyệt. Vui lòng chờ Admin xử lý.", false); return; }
+    forgotRequests.unshift({
+      key: key, username: acc.username, userId: acc.id,
+      joinedAt: acc.createdAt || null, time: new Date(),
+      newPassHash: hashStr(pass + "|" + key), status: "pending"
+    });
+    addLog("Yêu cầu quên mật khẩu", acc.username, false, "Đã gửi Admin duyệt · ID " + acc.id);
+    renderAdminForgot();
+    showMsg(msg, "Đã gửi yêu cầu. Admin sẽ duyệt — khi được duyệt, đăng nhập bằng mật khẩu mới bạn vừa đặt.", true);
+    document.getElementById("rpPass").value = "";
+    document.getElementById("rpPass2").value = "";
+    toast("Đã gửi yêu cầu quên mật khẩu tới Admin");
+  });
+
+  /* Sau khi Admin duyệt quên mật khẩu: đăng nhập lại → mặc định hiện đặt mật khẩu mới */
+  var pendingForceKey = null;
+  function showForcePass(acc, key){
+    pendingForceKey = key;
+    loginForm.hidden = true; registerForm.hidden = true; resetForm.hidden = true;
+    document.getElementById("fpUser").value = acc.username;
+    document.getElementById("fpPass").value = "";
+    document.getElementById("fpPass2").value = "";
+    showMsg(document.getElementById("forceMsg"), "Admin đã duyệt yêu cầu quên mật khẩu của @" + acc.username + ". Hãy đặt mật khẩu mới để tiếp tục đăng nhập.", true);
+    document.getElementById("forcePassForm").hidden = false;
+  }
+  document.getElementById("forcePassForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("forceMsg");
+    var acc = pendingForceKey ? accounts[pendingForceKey] : null;
+    if(!acc){ showMsg(msg, "Phiên đặt mật khẩu đã hết. Hãy quay lại đăng nhập.", false); return; }
+    var pass = document.getElementById("fpPass").value;
+    var pass2 = document.getElementById("fpPass2").value;
+    if(pass.length < 6){ showMsg(msg, "Mật khẩu mới phải có ít nhất 6 ký tự.", false); return; }
+    if(pass !== pass2){ showMsg(msg, "Mật khẩu nhập lại chưa khớp.", false); return; }
+    if(acc.fingerprint && acc.fingerprint !== fingerprint){
+      addLog("Đặt mật khẩu mới", acc.username, true, "Thiết bị không khớp thiết bị đã đăng ký");
+      showMsg(msg, "⛔ Chỉ đặt mật khẩu mới được trên đúng thiết bị đã đăng ký tài khoản.", false); return;
+    }
+    acc.passHash = hashStr(pass + "|" + pendingForceKey);
+    acc.forceNewPass = false;
+    delete acc.tempPass;
+    delete loginFails[pendingForceKey];
+    for(var i=0; i<forgotRequests.length; i++){
+      if(forgotRequests[i].key === pendingForceKey && forgotRequests[i].status === "approved"){ forgotRequests[i].done = true; break; }
+    }
+    addLog("Đặt mật khẩu mới", acc.username, false, "Sau khi Admin duyệt quên mật khẩu · ID " + acc.id);
+    renderAdminForgot();
+    pendingForceKey = null;
+    document.getElementById("forcePassForm").hidden = true;
+    toast("Đặt mật khẩu mới thành công · Xin chào @" + acc.username);
+    enterApp(acc);
+  });
+  document.getElementById("forceBack").addEventListener("click", function(){
+    document.getElementById("forcePassForm").hidden = true;
+    pendingForceKey = null;
+    setTab(false);
+  });
+
+  /* ---------- Rút tiền ---------- */
+  function showMsg(el, text, ok){
+    el.textContent = text;
+    el.className = "form-msg show " + (ok ? "ok" : "err");
+  }
+  function genTransferNote(){
+    var chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789", s = "";
+    for(var i=0;i<8;i++) s += chars.charAt(Math.floor(Math.random()*chars.length));
+    return "RUT" + s;
+  }
+  document.getElementById("withdrawForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("withdrawMsg");
+    var method = document.getElementById("wdMethod").value;
+    var name = document.getElementById("wdName").value.trim();
+    var account = document.getElementById("wdAccount").value.replace(/\s+/g, "");
+    var amount = parseFloat(document.getElementById("wdAmount").value);
+    if(method !== "Ví MoMo" && method !== "Ví ZaloPay"){ showMsg(msg, "Chỉ hỗ trợ rút về ví MoMo hoặc ví ZaloPay.", false); return; }
+    if(!name || !account){ showMsg(msg, "Vui lòng nhập đầy đủ họ tên chủ ví và số điện thoại ví.", false); return; }
+    if(!/^0\d{9}$/.test(account)){ showMsg(msg, "Số điện thoại ví MoMo/ZaloPay phải gồm 10 chữ số và bắt đầu bằng 0.", false); return; }
+    if(!amount || isNaN(amount)){ showMsg(msg, "Vui lòng nhập số xu muốn rút.", false); return; }
+    if(amount < MIN_WITHDRAW){ showMsg(msg, "Số xu rút tối thiểu là " + fmt(MIN_WITHDRAW) + " xu. Số dư khả dụng hiện tại: " + fmtCoin(available()) + " xu.", false); return; }
+    if(amount > available()){ showMsg(msg, "Số xu rút vượt quá số dư khả dụng (" + fmtCoin(available()) + " xu).", false); return; }
+    var code = "RT-" + String(Date.now()).slice(-6);
+    var note = genTransferNote();
+    var reqObj = { code:code, method:method, name:name, account:account, amount:amount, note:note, status:"pending", time:new Date() };
+    reqObj.qrText = buildWalletQR(reqObj);
+    state.requested += amount;
+    state.requests.unshift(reqObj);
+    if(currentUser){ currentUser.requestedTotal = state.requested; currentUser.requests = state.requests; }
+    renderWithdrawHistory();
+    renderAdminWithdrawals();
+    renderStats();
+    if(currentUser) addNotification(currentUser.username.toLowerCase(), "Đã tạo lệnh rút xu", "Lệnh " + code + " · " + fmtCoin(amount) + " xu đang chờ Admin duyệt. Ghi chú chuyển tiền: " + note + ".");
+    showMsg(msg, "Đã tạo lệnh rút xu " + code + " (" + fmtCoin(amount) + " xu) về " + method + " · " + name + " · " + account + " · ghi chú " + note + ". QR thông tin ví đã được gửi tới Admin ở mục Yêu cầu rút xu — Admin duyệt xong sẽ chuyển tiền vào ví của bạn.", true);
+    document.getElementById("wdAmount").value = "";
+    toast("Đã tạo lệnh rút xu " + code);
+    try{ saveStore(); }catch(err){}
+  });
+
+  /* ---------- AdSense ---------- */
+  var adsenseClient = null;
+  function fillAdSlot(container, val){
+    var slot = container.querySelector ? container.querySelector("[data-adslot]") : null;
+    if(!slot) return;
+    var ph = slot.querySelector("[data-adplaceholder]");
+    var real = slot.querySelector("[data-adreal]");
+    if(ph) ph.style.display = "none";
+    if(real){
+      real.style.display = "block";
+      if(!real.querySelector("ins")){
+        real.innerHTML = '<ins class="adsbygoogle" style="display:block" data-ad-format="fluid" data-ad-layout-key="-fb+5w+4e-db+86" data-ad-client="' + esc(val) + '"></ins>';
+        if(window.adsbygoogle){ try{ (window.adsbygoogle = window.adsbygoogle || []).push({}); }catch(err){} }
+      }
+    }
+  }
+  document.getElementById("adsenseForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("adsenseMsg");
+    var val = document.getElementById("pubId").value.trim();
+    if(!/^ca-pub-\d{10,}$/.test(val)){
+      showMsg(msg, "Publisher ID chưa đúng định dạng. Mã hợp lệ có dạng ca-pub- kèm ít nhất 10 chữ số.", false);
+      return;
+    }
+    var s = document.createElement("script");
+    s.async = true; s.crossOrigin = "anonymous";
+    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(val);
+    document.head.appendChild(s);
+    adsenseClient = val;
+    try{ saveStore(); }catch(e){}
+    var pubInput = document.getElementById("pubId"); if(pubInput) pubInput.value = val;
+    feed.querySelectorAll(".slide").forEach(function(slide){ fillAdSlot(slide, val); });
+    showMsg(msg, "Đã tải thư viện AdSense với mã " + val + ". Quảng cáo thật sẽ hiển thị trong luồng sau khi tài khoản được duyệt và có quảng cáo phù hợp.", true);
+    toast("Đã kích hoạt AdSense");
+  });
+
+  /* ================= TÀI KHOẢN / THIẾT BỊ / ADMIN ================= */
+  var ADMIN_USERNAME = "nongquocthien";
+  var accounts = {};        // usernameLower -> {username, id, passHash, fingerprint, role}
+  var usedIds = {};         // ID 7 số đã cấp
+  var deviceOwners = {};    // fingerprint -> usernameLower (1 thiết bị = 1 tài khoản)
+  var deviceLogs = [];      // nhật ký thiết bị
+  var currentUser = null;
+  var loginFails = {};      // usernameLower -> {count, lockedUntil}
+
+  function hashStr(s){
+    var h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+    for(var i=0; i<s.length; i++){ var ch = s.charCodeAt(i); h1 = Math.imul(h1 ^ ch, 2654435761); h2 = Math.imul(h2 ^ ch, 1597334677); }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (h2 >>> 0).toString(16).padStart(8,"0") + (h1 >>> 0).toString(16).padStart(8,"0");
+  }
+
+  function parseDevice(){
+    var ua = navigator.userAgent || "";
+    var os = "Không rõ", device = "Thiết bị lạ", browser = "Trình duyệt lạ";
+    if(/Windows NT/.test(ua)) os = "Windows"; else if(/Android/.test(ua)) os = "Android";
+    else if(/iPhone|iPad|iPod/.test(ua)) os = "iOS"; else if(/Mac OS X/.test(ua)) os = "macOS"; else if(/Linux/.test(ua)) os = "Linux";
+    var m = ua.match(/\(([^)]+)\)/);
+    if(/iPhone/.test(ua)) device = "iPhone"; else if(/iPad/.test(ua)) device = "iPad";
+    else if(/Android/.test(ua) && m){ var parts = m[1].split(";"); device = (parts[parts.length-1] || "Android").trim() || "Máy Android"; }
+    else if(/Windows NT/.test(ua)) device = "Máy tính Windows"; else if(/Macintosh/.test(ua)) device = "Mac";
+    if(/Edg\//.test(ua)) browser = "Edge"; else if(/OPR\//.test(ua)) browser = "Opera";
+    else if(/Chrome\//.test(ua)) browser = "Chrome"; else if(/Firefox\//.test(ua)) browser = "Firefox"; else if(/Safari\//.test(ua)) browser = "Safari";
+    var conn = navigator.connection || {};
+    var network = conn.effectiveType ? conn.effectiveType.toUpperCase() : "Không rõ";
+    if(conn.type) network = conn.type + " · " + network;
+    if(!navigator.onLine) network += " (mất mạng)";
+    return {
+      device: device, os: os, browser: browser, network: network, ip: "Đang lấy…",
+      screen: (window.screen ? screen.width + "×" + screen.height : "—"),
+      tz: (Intl.DateTimeFormat().resolvedOptions().timeZone || "—"),
+      lang: navigator.language || "—"
+    };
+  }
+  var deviceInfo = parseDevice();
+  var fingerprint = hashStr([
+    navigator.userAgent || "", navigator.platform || "", navigator.language || "",
+    deviceInfo.screen, (window.screen ? screen.colorDepth : ""), deviceInfo.tz,
+    navigator.hardwareConcurrency || "", navigator.deviceMemory || "", navigator.maxTouchPoints || 0
+  ].join("|"));
+
+  function addLog(action, username, blocked, note){
+    deviceLogs.unshift({
+      time: new Date(), action: action, username: username || "—", blocked: !!blocked, note: note || "",
+      device: deviceInfo.device, os: deviceInfo.os, browser: deviceInfo.browser,
+      network: deviceInfo.network, ip: deviceInfo.ip, fp: fingerprint.slice(0, 10)
+    });
+    try{ saveStore(); }catch(e){}
+    try{ renderAdminRevenue(); }catch(e){}
+    renderLogs();
+  }
+  function logItemHTML(l){
+    var t = l.time.toLocaleString("vi-VN");
+    /* IP, mạng: chỉ Admin mới thấy — người dùng thường không thấy. Không hiện mã/ID thiết bị. */
+    var detail = isAdmin(currentUser)
+      ? '<span>Thiết bị: ' + esc(l.device) + ' · ' + esc(l.os) + ' · ' + esc(l.browser) + '</span>' +
+        '<span>Mạng: ' + esc(l.network) + ' · IP: ' + esc(l.ip) + '</span>'
+      : '';
+    return '<div class="log-item"><b>' + esc(l.action) + ' · @' + esc(l.username) + '</b> ' +
+      (l.blocked ? '<span class="blocked">ĐÃ CHẶN</span>' : '<span class="allowed">Hợp lệ</span>') +
+      '<span>' + esc(t) + (l.note ? ' · ' + esc(l.note) : '') + '</span>' + detail + '</div>';
+  }
+  /* Mục Thiết bị & bảo mật của người dùng: chỉ hiện thiết bị đã đăng nhập + ngày giờ, không hiện ID/ghi chú chứa ID */
+  function logItemUserHTML(l){
+    var t = l.time.toLocaleString("vi-VN");
+    return '<div class="log-item"><b>' + esc(l.action) + '</b> ' +
+      (l.blocked ? '<span class="blocked">ĐÃ CHẶN</span>' : '<span class="allowed">Hợp lệ</span>') +
+      '<span>' + esc(l.device) + ' · ' + esc(l.os) + ' · ' + esc(l.browser) + '</span>' +
+      '<span>' + esc(t) + '</span></div>';
+  }
+  function renderLogs(){
+    var mine = currentUser ? deviceLogs.filter(function(l){
+      return l.username === currentUser.username && (l.action === "Đăng nhập" || l.action === "Đăng ký" || l.action === "Đăng xuất");
+    }) : [];
+    var myBox = document.getElementById("myLogList");
+    if(myBox) myBox.innerHTML = mine.length ? mine.map(logItemUserHTML).join("") : '<div class="empty-note">Chưa có lịch sử đăng nhập nào.</div>';
+    var adBox = document.getElementById("adminLogList");
+    if(adBox) adBox.innerHTML = deviceLogs.length ? deviceLogs.map(logItemHTML).join("") : '<div class="empty-note">Chưa có nhật ký nào.</div>';
+    if(isAdmin(currentUser)) renderAdminAccounts();
+    var av = document.getElementById("acctView");
+    if(selectedAcctKey && av && !av.hidden) renderAcctDetail();
+  }
+  function renderDevice(){
+    var rows = document.getElementById("deviceRows");
+    if(!rows) return;
+    /* Chỉ hiện thiết bị đã đăng nhập + ngày giờ — không hiện ID / mã thiết bị.
+       Mạng, IP, màn hình, múi giờ: chỉ Admin thấy thêm. */
+    var lastLogin = null;
+    if(currentUser){
+      for(var li=0; li<deviceLogs.length; li++){
+        var lg = deviceLogs[li];
+        if(lg.username === currentUser.username && (lg.action === "Đăng nhập" || lg.action === "Đăng ký") && !lg.blocked){ lastLogin = lg.time; break; }
+      }
+    }
+    var html =
+      '<div><span>Thiết bị đã đăng nhập</span><b>' + esc(deviceInfo.device) + '</b></div>' +
+      '<div><span>Hệ điều hành</span><b>' + esc(deviceInfo.os) + '</b></div>' +
+      '<div><span>Trình duyệt</span><b>' + esc(deviceInfo.browser) + '</b></div>' +
+      '<div><span>Trạng thái</span><b>Đang đăng nhập</b></div>' +
+      '<div><span>Đăng nhập gần nhất</span><b>' + esc(lastLogin ? lastLogin.toLocaleString("vi-VN") : "—") + '</b></div>' +
+      '<div><span>Ngày đăng ký tài khoản</span><b>' + esc(currentUser && currentUser.createdAt ? currentUser.createdAt.toLocaleString("vi-VN") : "—") + '</b></div>';
+    if(isAdmin(currentUser)){
+      html +=
+      '<div><span>Mạng</span><b>' + esc(deviceInfo.network) + '</b></div>' +
+      '<div><span>IP máy</span><b>' + esc(deviceInfo.ip) + '</b></div>' +
+      '<div><span>Màn hình</span><b>' + esc(deviceInfo.screen) + '</b></div>' +
+      '<div><span>Múi giờ</span><b>' + esc(deviceInfo.tz) + '</b></div>';
+    }
+    rows.innerHTML = html;
+  }
+  /* Lấy IP công cộng của máy */
+  try{
+    fetch("https://api.ipify.org?format=json").then(function(r){ return r.json(); }).then(function(d){
+      if(d && d.ip) deviceInfo.ip = d.ip;
+      if(currentUser && currentUser.device) currentUser.device.ip = deviceInfo.ip;
+      renderDevice();
+    }).catch(function(){ deviceInfo.ip = "Không lấy được"; renderDevice(); });
+  }catch(e){ deviceInfo.ip = "Không lấy được"; }
+
+  function genUserId(){
+    var id, guard = 0;
+    do { id = Math.floor(1000000 + Math.random() * 9000000); guard++; } while(usedIds[id] && guard < 200);
+    usedIds[id] = true;
+    return id;
+  }
+  function isAdmin(user){ return !!user && user.username.toLowerCase() === ADMIN_USERNAME; }
+
+  function renderAccount(){
+    if(!currentUser) return;
+    var initial = currentUser.username.charAt(0).toUpperCase();
+    document.getElementById("ucAvatar").textContent = initial;
+    document.getElementById("ucName").textContent = "@" + currentUser.username;
+    document.getElementById("ucId").textContent = "ID: " + currentUser.id;
+    var role = document.getElementById("ucRole");
+    if(isAdmin(currentUser)){ role.textContent = "Admin"; role.classList.add("admin"); }
+    else { role.textContent = "Người xem"; role.classList.remove("admin"); }
+    document.getElementById("adminSection").hidden = !isAdmin(currentUser);
+    document.getElementById("openProfile").textContent = initial;
+    renderDevice(); renderLogs(); renderAdminAccounts(); renderAdminWithdrawals(); renderAdminForgot(); renderNotifications(); renderCheckin();
+    try{ renderAdminOverview(); }catch(e){}
+    try{ renderRevShare(); }catch(e){}
+  }
+
+  /* ---------- ADMIN: danh sách & chi tiết quản lý tài khoản ---------- */
+  var selectedAcctKey = null;
+  var confirmDeleteKey = null;
+  var acctOpenSecs = {};
+  var admQuery = "";
+
+  function acctStatusBadge(acc){
+    if(acc.role === "admin") return '<span class="st-badge adm">Admin</span>';
+    return acc.locked ? '<span class="st-badge off">Đã khóa</span>' : '<span class="st-badge on">Đang hoạt động</span>';
+  }
+  function renderAdminAccounts(){
+    var box = document.getElementById("adminAcctList");
+    if(!box) return;
+    if(!isAdmin(currentUser)){ box.innerHTML = ""; return; }
+    var keys = Object.keys(accounts);
+    if(admQuery){
+      var q = admQuery.toLowerCase();
+      keys = keys.filter(function(k){ var a = accounts[k]; return a.username.toLowerCase().indexOf(q) >= 0 || String(a.id).indexOf(q) >= 0; });
+    }
+    if(!keys.length){ box.innerHTML = '<div class="empty-note">' + (admQuery ? "Không tìm thấy tài khoản nào khớp tìm kiếm." : "Chưa có tài khoản nào.") + '</div>'; return; }
+    keys.sort(function(a,b){ return accounts[a].id - accounts[b].id; });
+    box.innerHTML = keys.map(function(k){
+      var a = accounts[k];
+      return '<button type="button" class="acct-row" data-acct="' + esc(k) + '">' +
+        '<span class="a-av">' + esc(a.username.charAt(0).toUpperCase()) + '</span>' +
+        '<span class="a-main"><b>@' + esc(a.username) + '</b><span>ID: ' + a.id + ' · ' + esc(a.device ? a.device.device : "—") + '</span></span>' +
+        acctStatusBadge(a) + '</button>';
+    }).join("");
+    box.querySelectorAll("[data-acct]").forEach(function(btn){
+      btn.addEventListener("click", function(){ openAcctDetail(btn.getAttribute("data-acct")); });
+    });
+  }
+  var admSearchEl = document.getElementById("admSearch");
+  if(admSearchEl) admSearchEl.addEventListener("input", function(){ admQuery = admSearchEl.value.trim(); renderAdminAccounts(); });
+  /* Phím Escape: đóng màn hình đang mở trên cùng, quay về luồng quảng cáo */
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Escape") return;
+    var av = document.getElementById("acctView");
+    if(av && !av.hidden){ closeAcctDetail(); return; }
+    if(typeof tabViews !== "undefined" && tabViews.some(function(v){ return v && !v.hidden; })) showTab(null);
+  });
+
+  function openAcctDetail(key){
+    watchPaused = true; haltTimers();   // vào Admin: dừng đếm ngay, không tính lượt đang xem dở
+    selectedAcctKey = key; confirmDeleteKey = null;
+    renderAcctDetail();
+    document.getElementById("acctView").hidden = false;
+    pauseWatching();
+  }
+  function closeAcctDetail(){
+    selectedAcctKey = null; confirmDeleteKey = null;
+    document.getElementById("acctView").hidden = true;
+    renderAdminAccounts();
+    resumeWatching();
+  }
+  document.getElementById("closeAcct").addEventListener("click", closeAcctDetail);
+
+  /* Menu ô gọn — accordion: bấm vào đầu mục mới mở mục đó và tự đóng mục cũ.
+     Chỉ 1 mục mở tại 1 thời điểm trong cùng 1 nhóm (Trang cá nhân / Chi tiết tài khoản).
+     Bấm lại vào mục đang mở thì đóng mục đó. */
+  document.addEventListener("click", function(e){
+    var head = e.target && e.target.closest ? e.target.closest(".section-head") : null;
+    if(!head) return;
+    var sec = head.parentElement;
+    if(!sec || !sec.classList.contains("section")) return;
+    var body = null;
+    for(var i=0; i<sec.children.length; i++){ if(sec.children[i].classList.contains("section-body")) body = sec.children[i]; }
+    if(!body) return;
+    var willOpen = body.hidden;
+    /* Đóng tất cả mục khác trong cùng nhóm (cùng phần tử cha) */
+    var group = sec.parentElement;
+    if(group){
+      var siblings = group.querySelectorAll(":scope > .section");
+      siblings.forEach(function(other){
+        if(other === sec) return;
+        var otherBody = null;
+        for(var j=0; j<other.children.length; j++){ if(other.children[j].classList.contains("section-body")) otherBody = other.children[j]; }
+        if(otherBody && !otherBody.hidden){
+          otherBody.hidden = true;
+          other.classList.remove("open");
+          var otherHead = other.querySelector(".section-head");
+          if(otherHead) otherHead.setAttribute("aria-expanded", "false");
+        }
+        if(other.getAttribute("data-sec")) delete acctOpenSecs[other.getAttribute("data-sec")];
+      });
+    }
+    body.hidden = !willOpen;
+    sec.classList.toggle("open", willOpen);
+    head.setAttribute("aria-expanded", willOpen ? "true" : "false");
+    if(sec.getAttribute("data-sec")){
+      if(willOpen) acctOpenSecs[sec.getAttribute("data-sec")] = true; else delete acctOpenSecs[sec.getAttribute("data-sec")];
+    }
+  });
+
+  function renderAcctDetail(){
+    var box = document.getElementById("acctDetail");
+    var acc = selectedAcctKey ? accounts[selectedAcctKey] : null;
+    if(!box) return;
+    if(!acc){ box.innerHTML = '<div class="empty-note">Tài khoản không còn tồn tại.</div>'; return; }
+    var d = acc.device || {};
+    var bal = acctCoins(acc) - (acc.requestedTotal || 0);
+    var isSelfAdmin = acc.role === "admin";
+    var rows =
+      '<div><span>Trạng thái</span><b>' + (isSelfAdmin ? "Admin" : (acc.locked ? "Đã khóa" : "Đang hoạt động")) + '</b></div>' +
+      '<div><span>Vai trò</span><b>' + (isSelfAdmin ? "Admin (toàn quyền)" : "Người xem") + '</b></div>' +
+      '<div><span>ID người dùng</span><b>' + acc.id + '</b></div>' +
+      '<div><span>Ngày đăng ký</span><b>' + esc(acc.createdAt ? acc.createdAt.toLocaleString("vi-VN") : "—") + '</b></div>' +
+      '<div><span>Tên thiết bị</span><b>' + esc(d.device || "—") + '</b></div>' +
+      '<div><span>Hệ điều hành</span><b>' + esc(d.os || "—") + '</b></div>' +
+      '<div><span>Trình duyệt</span><b>' + esc(d.browser || "—") + '</b></div>' +
+      '<div><span>Mạng</span><b>' + esc(d.network || "—") + '</b></div>' +
+      '<div><span>IP máy</span><b>' + esc(d.ip || "—") + '</b></div>' +
+      '<div><span>Màn hình</span><b>' + esc(d.screen || "—") + '</b></div>' +
+      '<div><span>Múi giờ</span><b>' + esc(d.tz || "—") + '</b></div>' +
+      '<div><span>Ngôn ngữ</span><b>' + esc(d.lang || "—") + '</b></div>' +
+      '<div><span>Mã vân tay thiết bị</span><b>' + esc(acc.fingerprint ? acc.fingerprint : "Chưa gắn (chờ đăng nhập lại)") + '</b></div>' +
+      '<div><span>Quảng cáo đã xem</span><b>' + fmt(acctFull(acc) + acctPartial(acc)) + '</b></div>' +
+      '<div><span>Xem hết (hợp lệ)</span><b>' + fmt(acctFull(acc)) + ' lượt</b></div>' +
+      '<div><span>Xem nửa chừng</span><b>' + fmt(acctPartial(acc)) + ' lượt</b></div>' +
+      '<div><span>Tổng xu đã nhận</span><b>' + fmtCoin(acctCoins(acc)) + ' xu</b></div>' +
+      '<div><span>Xu từ xem hết</span><b>' + fmtCoin(acc.coinsFull || 0) + ' xu</b></div>' +
+      '<div><span>Xu từ xem nửa chừng</span><b>' + fmtCoin(acc.coinsPartial || 0) + ' xu</b></div>' +
+      '<div><span>Lượt trúng mức cao (0,5 – 1 xu)</span><b>' + fmt(acc.highWins || 0) + ' lượt</b></div>' +
+      '<div><span>Số dư</span><b>' + fmtCoin(bal) + ' xu</b></div>' +
+      '<div><span>Đã yêu cầu rút</span><b>' + fmtCoin(acc.requestedTotal || 0) + ' xu</b></div>';
+    var wd = (acc.requests && acc.requests.length)
+      ? acc.requests.map(function(r){
+          return '<div class="history-item"><div><b>' + esc(r.code) + ' · ' + fmtCoin(r.amount) + ' xu</b><span>' + esc(r.method) + ' · ' + esc(r.name) + ' · ' + esc(r.account) + (r.note ? '<br/>Nội dung: ' + esc(r.note) : '') + '</span></div>' + wdBadge(r.status || "pending") + '</div>';
+        }).join("")
+      : '<div class="empty-note">Chưa có yêu cầu rút tiền nào.</div>';
+    var logs = deviceLogs.filter(function(l){ return l.username === acc.username; });
+    var logHTML = logs.length ? logs.map(logItemHTML).join("") : '<div class="empty-note">Chưa có nhật ký nào.</div>';
+    var actions = isSelfAdmin
+      ? ''
+      : '<div class="acct-actions">' +
+          '<button type="button" class="btn ' + (acc.locked ? "ghost" : "warn") + '" data-act="lock">' + (acc.locked ? "Mở khóa tài khoản" : "Khóa tài khoản") + '</button>' +
+          '<button type="button" class="btn ghost" data-act="resetlogin">Xóa khóa đăng nhập sai</button>' +
+          '<button type="button" class="btn ghost" data-act="resetpass">Cấp mật khẩu tạm</button>' +
+          '<button type="button" class="btn ghost" data-act="rebind">Đặt lại thiết bị gắn kết</button>' +
+          '<button type="button" class="btn danger" data-act="delete">' + (confirmDeleteKey === selectedAcctKey ? "Bấm lần nữa để XÓA hẳn" : "Xóa tài khoản") + '</button>' +
+        '</div>';
+    box.innerHTML =
+      '<div class="user-card">' +
+        '<div class="avatar">' + esc(acc.username.charAt(0).toUpperCase()) + '</div>' +
+        '<div class="name">@' + esc(acc.username) + '</div>' +
+        '<div class="id">ID: ' + acc.id + '</div>' +
+        '<div style="margin-top:8px">' + acctStatusBadge(acc) + '</div>' +
+      '</div>' +
+      '<div class="section' + (acctOpenSecs.info ? " open" : "") + '" data-sec="info"><div class="section-head"><h3>Thông tin chi tiết</h3></div><div class="section-body"' + (acctOpenSecs.info ? "" : " hidden") + '><div class="device-rows">' + rows + '</div>' + actions +
+        (acc.tempPass ? '<div class="notice">Mật khẩu tạm của @' + esc(acc.username) + ': <b>' + esc(acc.tempPass) + '</b> — đưa mật khẩu này cho người dùng để họ đăng nhập.</div>' : "") + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.wd ? " open" : "") + '" data-sec="wd"><div class="section-head"><h3>Yêu cầu rút tiền</h3></div><div class="section-body"' + (acctOpenSecs.wd ? "" : " hidden") + '>' + wd + '</div></div>' +
+      '<div class="section' + (acctOpenSecs.logs ? " open" : "") + '" data-sec="logs"><div class="section-head"><h3>Nhật ký thiết bị của tài khoản</h3></div><div class="section-body"' + (acctOpenSecs.logs ? "" : " hidden") + '><div id="acctLogList">' + logHTML + '</div></div></div>';
+    box.querySelectorAll("[data-act]").forEach(function(btn){
+      btn.addEventListener("click", function(){ acctAction(btn.getAttribute("data-act")); });
+    });
+  }
+
+  function acctAction(act){
+    var acc = selectedAcctKey ? accounts[selectedAcctKey] : null;
+    if(!acc || !isAdmin(currentUser)) return;
+    if(act === "lock"){
+      acc.locked = !acc.locked;
+      addLog(acc.locked ? "Admin khóa tài khoản" : "Admin mở khóa tài khoản", acc.username, acc.locked, "ID " + acc.id);
+      toast(acc.locked ? "Đã khóa @" + acc.username : "Đã mở khóa @" + acc.username);
+    } else if(act === "resetlogin"){
+      delete loginFails[selectedAcctKey];
+      addLog("Admin xóa khóa đăng nhập", acc.username, false, "ID " + acc.id);
+      toast("Đã xóa khóa đăng nhập sai của @" + acc.username);
+    } else if(act === "resetpass"){
+      var chars = "abcdefghjkmnpqrstuvwxyz23456789", temp = "Mk";
+      for(var ci=0; ci<7; ci++) temp += chars.charAt(Math.floor(Math.random() * chars.length));
+      acc.tempPass = temp;
+      acc.passHash = hashStr(temp + "|" + selectedAcctKey);
+      delete loginFails[selectedAcctKey];
+      acctOpenSecs = { info:true };
+      addLog("Admin cấp mật khẩu tạm", acc.username, false, "ID " + acc.id);
+      toast("Đã cấp mật khẩu tạm cho @" + acc.username);
+    } else if(act === "rebind"){
+      acc.fingerprint = "";
+      addLog("Admin đặt lại thiết bị", acc.username, false, "Tài khoản sẽ gắn với thiết bị ở lần đăng nhập sau");
+      toast("Đã đặt lại thiết bị gắn kết của @" + acc.username);
+    } else if(act === "delete"){
+      if(confirmDeleteKey !== selectedAcctKey){ confirmDeleteKey = selectedAcctKey; renderAcctDetail(); return; }
+      var uname = acc.username;
+      delete accounts[selectedAcctKey];
+      /* Giữ nguyên deviceOwners: thiết bị đó vẫn không tạo được tài khoản mới (chống lạm dụng) */
+      addLog("Admin xóa tài khoản", uname, true, "Tài khoản đã bị xóa khỏi hệ thống phiên này");
+      toast("Đã xóa tài khoản @" + uname);
+      closeAcctDetail();
+      return;
+    }
+    renderAcctDetail(); renderAdminAccounts();
+  }
+  function enterApp(user){
+    currentUser = user;
+    /* Di trú tài khoản cũ: lượt đã ghi trước đây đều là xem hết (mức cũ), chưa có lượt nửa chừng */
+    if(user.fullCount == null){ user.fullCount = user.watchedCount || 0; user.partialCount = 0; }
+    if(user.partialCount == null) user.partialCount = 0;
+    if(user.watchSeconds == null) user.watchSeconds = (user.fullCount || 0) * VIEW_SECONDS;
+    /* Nạp số liệu riêng của tài khoản này */
+    state.watched = {}; state.fullCount = user.fullCount || 0; state.partialCount = user.partialCount || 0;
+    state.watchSeconds = user.watchSeconds || 0;
+    state.coins = user.coins || 0; state.coinsFull = user.coinsFull || 0;
+    state.coinsPartial = user.coinsPartial || 0; state.highWins = user.highWins || 0; state.lastReward = 0;
+    state.rewardLog = user.rewardLog || []; state.daily = user.daily || {};
+    state.watchedCount = state.fullCount + state.partialCount;
+    /* Feed được dựng lại từ đầu mỗi lần vào app: tiến độ khóa cuộn đặt lại, số dư giữ nguyên theo tài khoản */
+    Object.keys(watchProg).forEach(function(k){ delete watchProg[k]; });
+    Object.keys(timers).forEach(function(k){ clearInterval(timers[k]); delete timers[k]; });
+    Object.keys(watchStart).forEach(function(k){ delete watchStart[k]; });
+    Object.keys(watchBase).forEach(function(k){ delete watchBase[k]; });
+    watchPaused = false; pageGone = false; appBlurred = false;
+    setLocked(false); activeSlide = null;
+    state.requested = user.requestedTotal || 0;
+    state.requests = user.requests || [];
+    document.getElementById("authView").hidden = true;
+    profileView.hidden = true;
+    buildFeed();
+    feed.querySelectorAll(".slide").forEach(function(s){ io.observe(s); });
+    renderAccount(); renderStats(); renderWithdrawHistory();
+    try{ renderAdminRevenue(); }catch(e){}
+    try{ saveStore(); }catch(e){}
+  }
+
+  /* Tabs đăng nhập / đăng ký */
+  var loginForm = document.getElementById("loginForm"), registerForm = document.getElementById("registerForm");
+  function setTab(reg){
+    document.getElementById("tabLogin").classList.toggle("on", !reg);
+    document.getElementById("tabRegister").classList.toggle("on", reg);
+    loginForm.hidden = reg; registerForm.hidden = !reg;
+    if(typeof resetRegisterFlow === "function") resetRegisterFlow();
+    resetForm.hidden = true;
+    var ff = document.getElementById("forcePassForm");
+    if(ff) ff.hidden = true;
+  }
+  document.getElementById("tabLogin").addEventListener("click", function(){ setTab(false); });
+  document.getElementById("tabRegister").addEventListener("click", function(){ setTab(true); });
+
+  /* Quy tắc sử dụng — 2 bước:
+     Bước 1: bấm "Đăng ký tài khoản" (sau khi nhập hợp lệ) thì mục Quy tắc MỚI hiện ra.
+     Bước 2: tích vào dấu tích xác nhận → nút đổi thành "Xác nhận tạo tài khoản" và bấm được →
+             hiện thông báo "Tạo tài khoản thành công", tự lưu vào hệ thống rồi tự vào bên trong luôn. */
+  var rgAgree = document.getElementById("rgAgree"), rgSubmit = document.getElementById("rgSubmit");
+  var rgTerms = document.getElementById("rgTerms");
+  var rgTermsShown = false;
+  function syncRgSubmit(){ if(rgSubmit && rgAgree) rgSubmit.disabled = rgTermsShown && !rgAgree.checked; }
+  if(rgAgree) rgAgree.addEventListener("change", syncRgSubmit);
+  function resetRegisterFlow(){
+    rgTermsShown = false;
+    if(rgTerms) rgTerms.hidden = true;
+    if(rgAgree) rgAgree.checked = false;
+    if(rgSubmit) rgSubmit.textContent = "Đăng ký tài khoản";
+    syncRgSubmit();
+  }
+  syncRgSubmit();
+
+  function validateRegister(msg){
+    var user = document.getElementById("rgUser").value.trim();
+    var pass = document.getElementById("rgPass").value;
+    var pass2 = document.getElementById("rgPass2").value;
+    var key = user.toLowerCase();
+    if(!/^[a-zA-Z0-9_]{4,20}$/.test(user)){ showMsg(msg, "Username phải dài 4–20 ký tự, chỉ gồm chữ, số và dấu gạch dưới.", false); return null; }
+    if(pass.length < 6){ showMsg(msg, "Mật khẩu phải có ít nhất 6 ký tự.", false); return null; }
+    if(pass !== pass2){ showMsg(msg, "Mật khẩu nhập lại chưa khớp.", false); return null; }
+    if(accounts[key]){ showMsg(msg, "Username @" + user + " đã có người đăng ký. Hãy chọn username khác hoặc đăng nhập.", false); return null; }
+    /* ANTI: 1 thiết bị chỉ 1 tài khoản — chặn ngay tài khoản thứ 2 */
+    if(deviceOwners[fingerprint] && deviceOwners[fingerprint] !== key){
+      addLog("Đăng ký", user, true, "Thiết bị đã có tài khoản @" + (accounts[deviceOwners[fingerprint]] ? accounts[deviceOwners[fingerprint]].username : "") + " — chặn tạo tài khoản thứ 2");
+      showMsg(msg, "⛔ Thiết bị này đã đăng ký tài khoản @" + accounts[deviceOwners[fingerprint]].username + " rồi. Mỗi thiết bị chỉ được 1 tài khoản nên tài khoản thứ 2 bị chặn ngay. Hãy đăng nhập bằng tài khoản cũ.", false);
+      return null;
+    }
+    return { user:user, pass:pass, key:key };
+  }
+
+  registerForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("registerMsg");
+    var v = validateRegister(msg);
+    if(!v) return;
+    if(!rgTermsShown){
+      /* Bước 1: mới hiện mục Quy tắc + dấu tích xác nhận */
+      rgTermsShown = true;
+      if(rgTerms){
+        rgTerms.hidden = false;
+        rgTerms.classList.remove("flash"); void rgTerms.offsetWidth; rgTerms.classList.add("flash");
+        try{ rgTerms.scrollIntoView({ behavior:"smooth", block:"center" }); }catch(err){ rgTerms.scrollIntoView(); }
+      }
+      if(rgSubmit) rgSubmit.textContent = "Xác nhận tạo tài khoản";
+      syncRgSubmit();
+      showMsg(msg, "Quy tắc sử dụng đã hiện ở dưới. Tích vào dấu tích xác nhận rồi bấm “Xác nhận tạo tài khoản”.", true);
+      return;
+    }
+    /* Bước 2: phải tích dấu tích xác nhận mới tạo được tài khoản */
+    if(rgAgree && !rgAgree.checked){ showMsg(msg, "Vui lòng tích vào dấu tích đồng ý Quy tắc sử dụng để tạo tài khoản.", false); return; }
+    var acc = {
+      username: v.user, id: genUserId(), passHash: hashStr(v.pass + "|" + v.key), fingerprint: fingerprint,
+      role: v.key === ADMIN_USERNAME ? "admin" : "viewer",
+      locked: false, createdAt: new Date(), watchedCount: 0, fullCount: 0, partialCount: 0, watchSeconds: 0, coins: 0, coinsFull: 0, coinsPartial: 0, highWins: 0, requestedTotal: 0, requests: [], notifications: [], checkin: { lastDate:"", streak:0, total:0, coins:0, dates:[] }, rewardLog: [], daily: {},
+      device: { device: deviceInfo.device, os: deviceInfo.os, browser: deviceInfo.browser,
+                network: deviceInfo.network, ip: deviceInfo.ip, screen: deviceInfo.screen,
+                tz: deviceInfo.tz, lang: deviceInfo.lang }
+    };
+    accounts[v.key] = acc;
+    deviceOwners[fingerprint] = v.key;
+    addLog("Đăng ký", v.user, false, "Cấp ID " + acc.id + (acc.role === "admin" ? " · Tài khoản Admin" : ""));
+    try{ saveStore(); }catch(err){}   /* tự động lưu vào hệ thống ngay khi tạo */
+    resetRegisterFlow();
+    /* Thông báo tạo tài khoản thành công → tự nhảy vào bên trong luôn */
+    var pop = document.getElementById("regSuccess");
+    document.getElementById("regSuccessUser").textContent = "@" + acc.username;
+    document.getElementById("regSuccessId").textContent = acc.id;
+    if(pop) pop.hidden = false;
+    setTimeout(function(){
+      if(pop) pop.hidden = true;
+      enterApp(acc);
+      toast("Tạo tài khoản thành công · ID của bạn: " + acc.id);
+    }, 1600);
+  });
+
+  loginForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    var msg = document.getElementById("loginMsg");
+    var user = document.getElementById("liUser").value.trim();
+    var pass = document.getElementById("liPass").value;
+    var key = user.toLowerCase();
+    var fail = loginFails[key];
+    if(fail && fail.lockedUntil && Date.now() < fail.lockedUntil){
+      showMsg(msg, "Tài khoản tạm khóa vì đăng nhập sai nhiều lần. Thử lại sau " + Math.ceil((fail.lockedUntil - Date.now())/1000) + " giây.", false); return;
+    }
+    var acc = accounts[key];
+    if(acc && acc.locked){
+      addLog("Đăng nhập", acc.username, true, "Tài khoản đang bị Admin khóa");
+      showMsg(msg, "⛔ Tài khoản này đã bị Admin khóa nên không đăng nhập được.", false); return;
+    }
+    if(acc && acc.forceNewPass){ showForcePass(acc, key); return; }
+    if(!acc || acc.passHash !== hashStr(pass + "|" + key)){
+      loginFails[key] = fail || { count: 0, lockedUntil: 0 };
+      loginFails[key].count++;
+      if(loginFails[key].count >= 5){ loginFails[key].lockedUntil = Date.now() + 60000; loginFails[key].count = 0; }
+      addLog("Đăng nhập", user || "—", true, "Sai username hoặc mật khẩu");
+      showMsg(msg, "Sai username hoặc mật khẩu. Sai 5 lần liên tiếp sẽ bị khóa đăng nhập 60 giây.", false); return;
+    }
+    if(!acc.fingerprint){
+      /* Admin đã đặt lại gắn kết thiết bị: gắn với thiết bị đang đăng nhập này */
+      acc.fingerprint = fingerprint;
+      deviceOwners[fingerprint] = key;
+      acc.device = { device: deviceInfo.device, os: deviceInfo.os, browser: deviceInfo.browser,
+                     network: deviceInfo.network, ip: deviceInfo.ip, screen: deviceInfo.screen,
+                     tz: deviceInfo.tz, lang: deviceInfo.lang };
+    } else if(acc.fingerprint !== fingerprint){
+      addLog("Đăng nhập", acc.username, true, "Đăng nhập từ thiết bị khác thiết bị đã đăng ký");
+      showMsg(msg, "⛔ Tài khoản này được gắn với thiết bị lúc đăng ký. Đăng nhập từ thiết bị khác đã bị chặn và ghi nhật ký.", false); return;
+    }
+    delete loginFails[key];
+    addLog("Đăng nhập", acc.username, false, "ID " + acc.id);
+    toast("Xin chào @" + acc.username + " · ID " + acc.id);
+    enterApp(acc);
+  });
+
+  function activateAdSense(val, silent){
+    if(window.__adsLoaded) { adsenseClient = val; return; }
+    window.__adsLoaded = true; adsenseClient = val;
+    var s = document.createElement("script");
+    s.async = true; s.crossOrigin = "anonymous";
+    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + encodeURIComponent(val);
+    document.head.appendChild(s);
+    feed.querySelectorAll(".slide").forEach(function(sl){ fillAdSlot(sl, val); });
+    var pi = document.getElementById("pubId"); if(pi && !pi.value) pi.value = val;
+    if(!silent) toast("Đã kích hoạt AdSense");
+  }
+  document.getElementById("logoutBtn").addEventListener("click", function(){
+    watchPaused = true; haltTimers();   // đăng xuất khi đang xem dở: dừng đếm ngay, không tính lượt đó
+    if(currentUser) addLog("Đăng xuất", currentUser.username, false, "");
+    currentUser = null;
+    try{ renderNotifications(); }catch(e){}
+    try{ syncCheckinTop(); }catch(e){}
+    try{ saveStore(); }catch(e){}
+    profileView.hidden = true;
+    if(notiView) notiView.hidden = true;
+    if(checkinView) checkinView.hidden = true;
+    document.getElementById("authView").hidden = false;
+    setTab(false);
+  });
+
+  /* Khởi động: nạp storage bền vững, tự nạp AdSense thật nếu Admin đã lưu Publisher ID, khôi phục phiên */
+  var __restored = null;
+  try{ __restored = loadStore(); }catch(e){}
+  buildFeed();
+  feed.querySelectorAll(".slide").forEach(function(s){ io.observe(s); });
+  renderStats();
+  renderDevice();
+  if(adsenseClient) activateAdSense(adsenseClient, true);
+  if(__restored && __restored.sessionKey && accounts[__restored.sessionKey] && !accounts[__restored.sessionKey].locked){
+    enterApp(accounts[__restored.sessionKey]);
+    if(adsenseClient) activateAdSense(adsenseClient, true);
+  }
+})();
+</script>
+<script>
+/* KHUNG CỨNG: chặn cuộn/nảy ở trang ngoài — chỉ vùng cuộn bên trong khung mới vuốt được */
+(function(){
+  function inScroll(el){ return (el && el.closest) ? el.closest(".feed,.pv-scroll,.auth-view") : null; }
+  document.addEventListener("touchmove", function(e){ if(!inScroll(e.target)) e.preventDefault(); }, {passive:false});
+  document.addEventListener("wheel", function(e){ if(!inScroll(e.target)) e.preventDefault(); }, {passive:false});
+  document.addEventListener("gesturestart", function(e){ e.preventDefault(); });
+  window.addEventListener("scroll", function(){ if(window.scrollY || window.scrollX) window.scrollTo(0,0); }, {passive:true});
+})();
+</script>
+</body>
+</html>
